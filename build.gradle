@@ -1,0 +1,28 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://chaquo.com/maven" }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+
+        // Newer versions may be available: please check here:
+        // https://chaquo.com/chaquopy/doc/current/changelog.html
+        classpath 'com.chaquo.python:gradle:1.2.0'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
