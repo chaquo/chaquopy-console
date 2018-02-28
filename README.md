@@ -1,5 +1,11 @@
-# Chaquopy Hello World app
+# Chaquopy console app
 
-This is the Android Studio "Empty Activity" app template, ported to Python using
-[Chaquopy](https://chaquo.com/chaquopy/). To see exactly how this was done, look at [this
-commit](https://github.com/chaquo/chaquopy-hello/commit/391d9ca15398cb2609d2f1e614ce752690a2d61e).
+This is an example of an interactive Python console script running in an Android app using
+[Chaquopy](https://chaquo.com/chaquopy/). Some starting points:
+
+* The Python script is in `app/src/main/python/main.py`.
+* The Android activity which hosts it is in
+  `app/src/main/java/com/chaquo/python/console/MainActivity.java`.
+* The Chaquopy configuration (Python version, pip requirements list, etc.) is in `app/build.gradle`.
+
+The project currently targets Android Studio 3.0.

@@ -4,7 +4,7 @@ apply plugin: 'com.chaquo.python'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.chaquo.python.hello"
+        applicationId "com.chaquo.python.console"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
@@ -18,7 +18,9 @@ android {
             // This is the version of Python to build into your app. Options are 2.7.14 and 3.6.3.
             version "3.6.3"
 
-            staticProxy "hello"
+            pip {
+                install "six"
+            }
         }
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -34,8 +36,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "android.arch.lifecycle:extensions:1.1.0"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'android.arch.core:core-testing:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
