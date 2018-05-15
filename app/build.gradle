@@ -15,8 +15,8 @@ android {
             // a Python 2.7 or 3.3+ executable.
             // buildPython "C:/Python27/python.exe"
 
-            // This is the version of Python to build into your app. Options are 2.7.14 and 3.6.3.
-            version "3.6.3"
+            // This is the version of Python to build into your app. Options are 2.7.15 and 3.6.5.
+            version "3.6.5"
 
             pip {
                 install "six"
