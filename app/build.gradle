@@ -11,8 +11,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         python {
-            // If "python" is not on your PATH, enable and edit the following line to point to
-            // a Python 2.7 or 3.3+ executable.
+            // If Chaquopy fails to find Python on your build machine, enable and edit the
+            // following line to point to a Python 2.7 or 3.3+ executable.
             // buildPython "C:/Python27/python.exe"
 
             // This is the version of Python to build into your app. Options are 2.7.15 and 3.6.5.
