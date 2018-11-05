@@ -5,18 +5,15 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.chaquo.python.console"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         python {
             // If Chaquopy fails to find Python on your build machine, enable and edit the
-            // following line to point to a Python 2.7 or 3.3+ executable.
-            // buildPython "C:/Python27/python.exe"
-
-            // This is the version of Python to build into your app. Options are 2.7.15 and 3.6.5.
-            version "3.6.5"
+            // following line to point to a Python 3.4+ executable.
+            // buildPython "C:/Python36/python.exe"
 
             pip {
                 install "six"
