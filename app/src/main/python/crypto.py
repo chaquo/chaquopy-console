@@ -104,50 +104,48 @@ class HMAC256:
 
 # ---------------------------------------------------------------------------
 
-def run(hmac=None, test=None):
-	if test == None:
-		if hmac:
-			h = HMAC256()
-			h.create()
-			print("# new HMAC_SHA256 key: share it ONLY with trusted peers")
-			print('{\n  '+(',\n '.join(h.as_string().split(','))[1:-1])+'\n}')
-		else:
-			key_pair = ED25519()
-			key_pair.create()
-			print("# new ED25519 key pair: ALWAYS keep the private key as a secret")
-			print('{\n  '+(',\n '.join(key_pair.as_string().split(','))[1:-1])+'\n}')
+def create_keys(hmac=False):
+	if hmac:
+		h = HMAC256()
+		h.create()
+		print("# new HMAC_SHA256 key: share it ONLY with trusted peers")
+		print('{\n  '+(',\n '.join(h.as_string().split(','))[1:-1])+'\n}')
 	else:
-		if hmac:
-			print("Creating an HMAC_SHA256 key, testing signing")
+		key_pair = ED25519()
+		key_pair.create()
+		print("# new ED25519 key pair: ALWAYS keep the private key as a secret")
+		print('{\n  '+(',\n '.join(key_pair.as_string().split(','))[1:-1])+'\n}')
+
+
+def test_keys(hmac=False):
+	if hmac:
+		print("Creating an HMAC_SHA256 key, testing signing")
 			
-			# generate random key
-			h = HMAC256()
-			h.create()
-			print("shared key is", h.as_string())
-			secret = h.get_private_key()			
-			msg = "hello world test 1234 / hmac_sha256".encode()
-			signature = h.sign(msg)			
-			print("verify1:", HMAC256.verify(secret, msg, signature))
-			print("verify2:", HMAC256.verify(secret, signature+msg))
-		else:
-			print("Creating an ED25519 key pair, testing signing")
+		# generate random key
+		h = HMAC256()
+		h.create()
+		print("shared key is", h.as_string())
+		secret = h.get_private_key()			
+		msg = "hello world test 1234 / hmac_sha256".encode()
+		signature = h.sign(msg)			
+		print("verify1:", HMAC256.verify(secret, msg, signature))
+		print("verify2:", HMAC256.verify(secret, signature+msg))
+	else:
+		print("Creating an ED25519 key pair, testing signing")
+		# generate random key pair
+		key_pair = ED25519()
+		key_pair.create()
+		print("key pair is", key_pair.as_string())
+		secret = key_pair.get_private_key()
 
-			# generate random key pair
-			key_pair = ED25519()
-			key_pair.create()
-			print("key pair is", key_pair.as_string())
-			secret = key_pair.get_private_key()
+		msg = "hello world test 1234 / ed25519".encode()
+		signature = key_pair.sign(msg)
 
-			msg = "hello world test 1234 / ed25519".encode()
-			signature = key_pair.sign(msg)
+		print("verify1:", ED25519.verify(key_pair.get_public_key(), msg, signature))
 
-			print("verify1:", ED25519.verify(key_pair.get_public_key(),
-                                             msg, signature))
-
-
-			# use previously generated (secret) key, test with concatenated sign+msg
-			kp2 = ED25519(secret)
-			print("verify2:", ED25519.verify(kp2.get_public_key(), signature+msg))
+		# use previously generated (secret) key, test with concatenated sign+msg
+		kp2 = ED25519(secret)
+		print("verify2:", ED25519.verify(kp2.get_public_key(), signature+msg))
 
 
 if __name__ == '__main__':
