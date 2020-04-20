@@ -17,6 +17,7 @@ android {
 
             pip {
                 install "six"
+                install "pynacl"
             }
         }
         ndk {
