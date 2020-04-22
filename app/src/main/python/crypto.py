@@ -104,17 +104,13 @@ class HMAC256:
 
 # ---------------------------------------------------------------------------
 
-def create_keys(hmac=False):
-	if hmac:
-		h = HMAC256()
-		h.create()
-		print("# new HMAC_SHA256 key: share it ONLY with trusted peers")
-		print('{\n  '+(',\n '.join(h.as_string().split(','))[1:-1])+'\n}')
-	else:
-		key_pair = ED25519()
-		key_pair.create()
-		print("# new ED25519 key pair: ALWAYS keep the private key as a secret")
-		print('{\n  '+(',\n '.join(key_pair.as_string().split(','))[1:-1])+'\n}')
+def create_keys():
+	key_pair = ED25519()
+	key_pair.create()
+	s = "# new ED25519 key pair: ALWAYS keep the private key as a secret\n"
+	s += '{\n  '+(',\n '.join(key_pair.as_string().split(','))[1:-1])+'\n}'
+	print("Account created!, saving private and public keys in 'secret'")
+	return s
 
 
 def test_keys(hmac=False):

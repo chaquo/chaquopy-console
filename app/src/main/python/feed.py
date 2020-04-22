@@ -3,46 +3,52 @@
 # lib/feed.py
 # Jan-Mar 2020 <christian.tschudin@unibas.ch>
 
-import cbor2
 import os
 
 import event
 import pcap
+import crypto
 
 
 class FEED:
 
     def __init__(self, fname, fid=None, signer=None,
                  create_if_notexisting=False):
-        self.fname = fname
-        self.fid = fid
-        self.signer = signer
-        self.cine = create_if_notexisting
-
-        self.seq = 0
-        self.pcap = pcap.PCAP(fname)
-        self.hprev = None
         try:
-            self.pcap.open('r')
-            # find highest seq number:
-            w = self.pcap.read_backwards(True)
-            e = event.EVENT()
-            e.from_wire(w)
-            if fid != None and e.fid != fid:
-                print("feed ID mismatch:", e.fid, "instead of", fid)
+            self.fname = fname
+            self.fid = fid
+            self.signer = signer
+            self.cine = create_if_notexisting
+
+            self.seq = 0
+            self.pcap = pcap.PCAP(fname)
+            self.hprev = None
+            try:
+                self.pcap.open('r')
+                # find highest seq number:
+                w = self.pcap.read_backwards(True)
+                e = event.EVENT()
+                e.from_wire(w)
+                if fid != None and e.fid != fid:
+                    print("feed ID mismatch:", e.fid, "instead of", fid)
+                    self.pcap.close()
+                    self.pcap = None
+                    return
+                self.fid, self.seq = e.fid, e.seq
+                self.hprev = event.get_hash(e.metabits)
                 self.pcap.close()
-                self.pcap = None
-                return
-            self.fid, self.seq = e.fid, e.seq
-            self.hprev = event.get_hash(e.metabits)
-            self.pcap.close()
+            except Exception as e:
+                if not self.cine:
+                    self.pcap = None
+                    print(f"error opening file {fname}")
+                else:
+                    self.pcap.open('w')
+                    self.pcap.close()
         except Exception as e:
-            if not self.cine:
-                self.pcap = None
-                print(f"error opening file {fname}")
-            else:
-                self.pcap.open('w')
-                self.pcap.close()
+            print("ERROR IN feed CONSTRUCTOR")
+            _, _, tb = sys.exc_info()
+            print(e)
+            print("At line number {}".format(tb.tb_lineno))
 
     def _append(self, w): # blindly append the bytes in w to a log file
         p = self.pcap
@@ -131,6 +137,7 @@ class FEED_ITER:
 
 # ----------------------------------------------------------------------
 
+
 if __name__ == '__main__':
 
     import argparse
@@ -138,17 +145,6 @@ if __name__ == '__main__':
     import sys
 
     import crypto
-
-    def load_keyfile(fn):
-        with open(fn, 'r') as f:
-            key = eval(f.read())
-        if key['type'] == 'ed25519':
-            fid = bytes.fromhex(key['public'])
-            signer = crypto.ED25519(bytes.fromhex(key['private']))
-        elif key['type'] == 'hmac_sha256':
-            fid = bytes.fromhex(key['feed_id'])
-            signer = crypto.HMAC256(bytes.fromhex(key['private']))
-        return fid, signer
 
     parser = argparse.ArgumentParser(description='BACnet feed tool')
     parser.add_argument('--keyfile')

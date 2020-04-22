@@ -27,7 +27,7 @@
 '''
 
 import hashlib
-import cbor2
+import cbor
 
 import crypto
 
@@ -39,10 +39,10 @@ HASHINFO_SHA512      = 1
 # ---------------------------------------------------------------------------
 
 def serialize(ds):
-    return cbor2.dumps(ds)
+    return cbor.dumps(ds)
 
 def deserialize(s):
-    return cbor2.loads(s)
+    return cbor.loads(s)
 
 def get_hash(blob):
     return hashlib.sha256(blob).digest()
