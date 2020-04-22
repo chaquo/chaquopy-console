@@ -128,7 +128,7 @@ def test_db():
 	connector.insert_to_table('chat', '20:45', 'Peter', 'Hallo')
 	connector.insert_to_table('chat', '20:46', 'Max', 'Hallo')
 	connector.insert_to_table('chat', '20:47', 'Gustavo', 'Hallo')
-
+	connector.commit_changes()
 	connector.get_all_from_table('chat')
 	rows = connector.cursor.fetchall()
 
