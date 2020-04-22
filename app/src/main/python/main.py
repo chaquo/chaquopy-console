@@ -2,11 +2,12 @@ from six.moves import input
 from crypto import create_keys, ED25519
 import feed
 import sys
-import sqlite3
 from com.chaquo.python import Python
 from os.path import join
 import os
 import pcap
+
+import viktor
 
     
 CREATE_SECRET = "create_secret"
@@ -24,8 +25,10 @@ FILES_DIR = str(Python.getPlatform().getApplication().getFilesDir())
 
 SECRET_ABSOLUTE_PATH = join(FILES_DIR, "secret")
 MY_FEED_ABSOLUTE_PATH = join(FILES_DIR, "my_feed.pcap")
+VIKTOR_DB_ABSOLUTE_PATH = join(FILES_DIR, "stData")
 
 HELLO_WORLD_LOG = ["hello world!", 123, {"hello": "world", "this is a ": "dictionary"}]
+
 
 class NON_ED25519_EXCEPTION(Exception):
 	pass
@@ -118,8 +121,28 @@ def create_secret(keypair):
 	file.close()
 
 
+def test_db():
+	connector = viktor.SqLiteConnector(name=VIKTOR_DB_ABSOLUTE_PATH)
+	connector.start_database_connection()
+	connector.create_table('chat')
+	connector.insert_to_table('chat', '20:45', 'Peter', 'Hallo')
+	connector.insert_to_table('chat', '20:46', 'Max', 'Hallo')
+	connector.insert_to_table('chat', '20:47', 'Gustavo', 'Hallo')
+
+	connector.get_all_from_table('chat')
+	rows = connector.cursor.fetchall()
+
+	for row in rows:
+		print(row)
+
+
 def main():
 	try:
+		############### DB TEST##############
+		test_db() # comment me out
+		return # comment me out too
+		#####################################
+
 		print("Avaliable commands: {}".format(options))
 		action = input()
 		if action not in options:
