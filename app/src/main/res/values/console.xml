@@ -3,6 +3,7 @@
 
     <string name="top">Top</string>
     <string name="bottom">Bottom</string>
+    <string name="home">Home</string>
 
     <color name="console_error">#b53f3f</color>
     <color name="console_meta">#304ffe</color>

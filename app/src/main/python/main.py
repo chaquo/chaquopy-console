@@ -139,8 +139,8 @@ def test_db():
 def main():
 	try:
 		############### DB TEST##############
-		test_db() # comment me out
-		return # comment me out too
+		#test_db() # comment me out
+		#return # comment me out too
 		#####################################
 
 		print("Avaliable commands: {}".format(options))

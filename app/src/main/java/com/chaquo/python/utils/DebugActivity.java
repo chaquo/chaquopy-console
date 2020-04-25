@@ -13,7 +13,7 @@ import com.chaquo.python.*;
  * If STDIN_ENABLED is passed to the Task constructor, sys.stdin will also be redirected whenever
  * the activity is resumed. The input box will initially be hidden, and will be displayed the
  * first time sys.stdin is read. */
-public abstract class PythonConsoleActivity extends ConsoleActivity {
+public abstract class DebugActivity extends ConsoleActivity {
 
     protected Task task;
 
@@ -38,30 +38,10 @@ public abstract class PythonConsoleActivity extends ConsoleActivity {
 
     // =============================================================================================
 
-    public static abstract class Task extends ConsoleActivity.Task {
+    public static class Task extends BacNetPythonTask {
 
-        protected Python py = Python.getInstance();
-        private PyObject sys;
-        private PyObject stdin, stdout, stderr;
-        private PyObject realStdin, realStdout, realStderr;
-
-        public static final int STDIN_DISABLED = 0x0, STDIN_ENABLED = 0x1;
-
-        public Task(Application app) { this(app, STDIN_ENABLED); }
-
-        public Task(Application app, int flags) {
+        public Task(Application app) {
             super(app);
-            sys = py.getModule("sys");
-            PyObject console = py.getModule("chaquopy.utils.console");
-            if ((flags & STDIN_ENABLED) != 0) {
-                realStdin = sys.get("stdin");
-                stdin = console.callAttr("ConsoleInputStream", this);
-            }
-
-            realStdout = sys.get("stdout");
-            realStderr = sys.get("stderr");
-            stdout = console.callAttr("ConsoleOutputStream", this, "output", realStdout);
-            stderr = console.callAttr("ConsoleOutputStream", this, "outputError", realStderr);
         }
 
         /** Create the thread from Python rather than Java, otherwise user code may be surprised
