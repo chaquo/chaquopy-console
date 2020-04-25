@@ -131,6 +131,7 @@ def base64ify(d):
 def dump(fname):
     p = PCAP(fname)
     p.open('r')
+    s = ""
     for w in p:
         # here we apply our knowledge about the event/pkt's internal struct
         e = cbor.loads(w)
@@ -142,10 +143,11 @@ def dump(fname):
         seq = e[0][1]
         if e[2] != None:
             e[2] = cbor.loads(e[2])
-        print(f"** fid={fid}, seq={seq}, ${len(w)} bytes")
-        print(f"   hashref={href.hex()}")
-        print(f"   content={e[2]}")
+        s += f"** fid={fid}, seq={seq}, ${len(w)} bytes" + "\n"
+        s += f"   hashref={href.hex()}" + "\n"
+        s += f"   content={e[2]}" + "\n"
     p.close()
+    return s
 
 # ----------------------------------------------------------------------
 

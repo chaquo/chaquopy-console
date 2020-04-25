@@ -51,7 +51,9 @@ def dump():
 		print("no feed to dump!")
 		print("try creating a feed first")
 	else:
-		pcap.dump(MY_FEED_ABSOLUTE_PATH)
+		s = pcap.dump(MY_FEED_ABSOLUTE_PATH)
+		print(s)
+		return s
 
 
 def append(log_to_be_appended):

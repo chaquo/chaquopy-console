@@ -3,12 +3,15 @@ package com.chaquo.python.utils;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.TextView;
 
 import com.chaquo.python.console.R;
 
@@ -29,6 +32,12 @@ public class MyFeedActivity extends BacNetActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Python py = Python.getInstance();
+        TextView textView = (TextView) findViewById(R.id.text_content);
+        PyObject x = py.getModule("my_feed");
+        String y = x.callAttr("do").toString();
+        textView.setText(y);
     }
 
 
