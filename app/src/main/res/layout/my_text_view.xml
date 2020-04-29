@@ -1,5 +1,37 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/text_view_id"
-android:layout_height="wrap_content"
-android:layout_width="wrap_content"
-android:text="@string/app_name" />
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
+
+    <TableRow>
+    <TextView
+        android:layout_column="1"
+        android:id="@+id/my_text_view_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_text_view_name" />
+
+    <TextView
+        android:id="@+id/my_text_view_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="end"
+        android:text="@string/my_text_view_timestamp"
+        />
+
+    </TableRow>
+
+    <TextView
+        android:id="@+id/my_text_view_content"
+        android:layout_width="172dp"
+        android:layout_height="match_parent"
+        android:text="@string/my_text_view_content" />
+
+
+</TableLayout>

@@ -4,6 +4,13 @@
     <string name="myfeed">myFeed</string>
     <string name="myDebug">Debug </string>
     <string name="title_activity_my_feed">MyFeedActivity</string>
+
+
+    <string name="my_text_view_name">my_text_view_name</string>
+    <string name="my_text_view_content">my_text_view_content</string>
+    <string name="my_text_view_timestamp">my_text_view_timestamp</string>
+
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
