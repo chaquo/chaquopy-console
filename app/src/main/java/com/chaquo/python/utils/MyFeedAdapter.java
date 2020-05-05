@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaquo.python.console.R;
 
-import org.w3c.dom.Text;
-
 public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.MyViewHolder> {
     private FeedLog[] mDataset;
 
@@ -55,9 +53,9 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        ((TextView) holder.layout.findViewById(R.id.my_text_view_name)).setText(mDataset[position].log_name);
+        //((TextView) holder.layout.findViewById(R.id.my_text_view_name)).setText(mDataset[position].log_name);
         ((TextView) holder.layout.findViewById(R.id.my_text_view_content)).setText(mDataset[position].log_content);
-        ((TextView) holder.layout.findViewById(R.id.my_text_view_timestamp)).setText(mDataset[position].log_timestamp);
+        ((TextView) holder.layout.findViewById(R.id.my_text_view_timestamp)).setText(mDataset[position].sequence_number);
         //holder.textView.setText(mDataset[position]);
 
     }

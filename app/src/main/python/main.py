@@ -55,6 +55,15 @@ def dump():
 		print(s)
 		return s
 
+def dumpList():
+		if not os.path.exists(MY_FEED_ABSOLUTE_PATH):
+			print("no feed to dump!")
+			print("try creating a feed first")
+		else:
+			list = pcap.dump(MY_FEED_ABSOLUTE_PATH)
+			print(list)
+			return list
+
 
 def append(log_to_be_appended):
 	if not os.path.exists(MY_FEED_ABSOLUTE_PATH):

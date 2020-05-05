@@ -143,6 +143,28 @@ def dump(fname):
         seq = e[0][1]
         if e[2] != None:
             e[2] = cbor.loads(e[2])
+        #s += f"** fid={fid}, seq={seq}, ${len(w)} bytes" + "\n"
+        #s += f"   hashref={href.hex()}" + "\n"
+        #s += f"   content={e[2]}" + "\n"
+        s += f"content={e[2]}" + "_" + f"seq={seq}" + "_"
+    p.close()
+    return s
+
+def dumpList(fname):
+    p = PCAP(fname)
+    p.open('r')
+    s = ""
+    for w in p:
+        # here we apply our knowledge about the event/pkt's internal struct
+        e = cbor.loads(w)
+        href = hashlib.sha256(e[0]).digest()
+        e[0] = cbor.loads(e[0])
+        # rewrite the packet's byte arrays for pretty printing:
+        e[0] = base64ify(e[0])
+        fid = e[0][0]
+        seq = e[0][1]
+        if e[2] != None:
+            e[2] = cbor.loads(e[2])
         s += f"** fid={fid}, seq={seq}, ${len(w)} bytes" + "\n"
         s += f"   hashref={href.hex()}" + "\n"
         s += f"   content={e[2]}" + "\n"

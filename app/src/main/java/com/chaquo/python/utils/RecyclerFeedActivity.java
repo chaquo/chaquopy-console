@@ -1,22 +1,20 @@
 package com.chaquo.python.utils;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Application;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.chaquo.python.console.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 public class RecyclerFeedActivity extends BacNetActivity {
     private RecyclerView recyclerView;
@@ -139,10 +137,43 @@ public class RecyclerFeedActivity extends BacNetActivity {
                 "One by one; lays them out carefully " +
                 "On the deal table, his work done.", "12:24");
 
-        mAdapter = new MyFeedAdapter(new FeedLog[] {f1, f2, f3, f4}); // TODO !!!
+        //mAdapter = new MyFeedAdapter(new FeedLog[] {f1, f2, f3, f4}); // TODO !!!
+        //recyclerView.setAdapter(mAdapter);
+
+        /*Python py = Python.getInstance();
+        TextView textView = (TextView) findViewById(R.id.text_content);
+        PyObject x = py.getModule("my_feed");
+        String y = x.callAttr("do").toString();
+        textView.setText(y);*/
+        //Log.d("informations1", "HEEEEY");
+        passLogToGUI();
+
+    }
+
+    public void passLogToGUI() {
+
+        Python py = Python.getInstance();
+        PyObject x = py.getModule("main");
+        String entries = x.callAttr("dumpList").toString();
+        //we have to pass array with string [content|sequence] as array
+        String[] s = entries.split("_"); // s = ["content1, seq1, content2, seq2, content3...]
+        //Log.d("informations2", Arrays.toString(s));
+        FeedLog[] feed = new FeedLog[s.length/2];
+        for (int i = s.length/2-1; i >= 0; i--) {
+            FeedLog entry = new FeedLog("", s[i*2], s[i*2+1]);
+            feed[s.length/2-i-1] = entry;
+            //Log.d("informations2", feed[s.length/2-i-1].log_content);
+        }
+
+        mAdapter = new MyFeedAdapter(feed);
         recyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        passLogToGUI();
+    }
 
     public static class Task extends DebugActivity.Task {
         public Task(Application app) {
@@ -159,3 +190,4 @@ public class RecyclerFeedActivity extends BacNetActivity {
         return Task.class;
     }
 }
+
