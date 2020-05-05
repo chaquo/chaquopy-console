@@ -50,6 +50,10 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:24.2.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:24.2.1'
 }
 repositories {
     mavenCentral()

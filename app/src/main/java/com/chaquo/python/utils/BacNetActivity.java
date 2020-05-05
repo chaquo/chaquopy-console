@@ -91,11 +91,20 @@ public abstract class BacNetActivity extends AppCompatActivity
         startActivityIfNeeded(openActivity, 0);
     }
 
+    void openPostActivity(){
+        Intent openActivity = new Intent(this, PostActivity.class);
+        openActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(openActivity, 0);
+    }
+
+
+
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == resId("id", "menu_myFeed")) {
             //openMyFeedActivity();
             openMyFeedRecyclerActivity();
+            //openPostActivity();
             return true;
         }
         if (id == resId("id", "menu_Debug")) {

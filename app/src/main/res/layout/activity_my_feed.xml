@@ -35,6 +35,7 @@
 
     <include layout="@layout/content_my_feed" />
 
+    <!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -43,5 +44,6 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+        -->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
