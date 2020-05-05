@@ -91,13 +91,6 @@ public abstract class BacNetActivity extends AppCompatActivity
         startActivityIfNeeded(openActivity, 0);
     }
 
-    void openPostActivity(){
-        Intent openActivity = new Intent(this, PostActivity.class);
-        openActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivityIfNeeded(openActivity, 0);
-    }
-
-
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

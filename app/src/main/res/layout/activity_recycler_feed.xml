@@ -26,7 +26,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="27dp"
         android:clickable="true"
-        app:srcCompat="@drawable/ic_search_black_24dp"
+        app:srcCompat="@android:drawable/ic_dialog_email"
         tools:ignore="VectorDrawableCompat" />
 
 
