@@ -4,10 +4,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -22,10 +26,10 @@ public class RecyclerFeedActivity extends BacNetActivity {
     private RecyclerView.LayoutManager layoutManager;
 
 
-    public void openSendMessageActivity(){
+    public void openSendMessageActivity() {
         LayoutInflater inflater = (LayoutInflater)
                 getSystemService(LAYOUT_INFLATER_SERVICE);
-        View popupView = inflater.inflate(R.layout.activity_send_message, null);
+        final View popupView = inflater.inflate(R.layout.activity_send_message, null);
 
         // create the popup window
         //int width = LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -34,10 +38,25 @@ public class RecyclerFeedActivity extends BacNetActivity {
         //int height = 950;
         boolean focusable = true; // lets taps outside the popup also dismiss it
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
+        popupWindow.setTouchable(true);
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
         popupWindow.showAtLocation(recyclerView, Gravity.CENTER, 0, -100);
+        Button button = popupView.findViewById(R.id.post_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //append to feed
+                EditText receiver = popupView.findViewById(R.id.send_message_to);
+                EditText message = popupView.findViewById(R.id.send_post_content);
+                String audience = receiver.getText().toString();
+                String content = message.getText().toString();
+                postContent(audience, content);
+                //System.out.println("CLICKED ON BUTTON");
+            }
+        });
 
         // dismiss the popup window when touched
         /*
@@ -49,6 +68,12 @@ public class RecyclerFeedActivity extends BacNetActivity {
             }
         });
          */
+    }
+
+    void postContent(String audience, String content) {
+        System.out.println(audience);
+        //call python
+
     }
 
     @Override
@@ -64,6 +89,7 @@ public class RecyclerFeedActivity extends BacNetActivity {
                 openSendMessageActivity();
             }
         });
+
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -158,10 +184,10 @@ public class RecyclerFeedActivity extends BacNetActivity {
         //we have to pass array with string [content|sequence] as array
         String[] s = entries.split("_"); // s = ["content1, seq1, content2, seq2, content3...]
         //Log.d("informations2", Arrays.toString(s));
-        FeedLog[] feed = new FeedLog[s.length/2];
-        for (int i = s.length/2-1; i >= 0; i--) {
-            FeedLog entry = new FeedLog("", s[i*2], s[i*2+1]);
-            feed[s.length/2-i-1] = entry;
+        FeedLog[] feed = new FeedLog[s.length / 2];
+        for (int i = s.length / 2 - 1; i >= 0; i--) {
+            FeedLog entry = new FeedLog("", s[i * 2], s[i * 2 + 1]);
+            feed[s.length / 2 - i - 1] = entry;
             //Log.d("informations2", feed[s.length/2-i-1].log_content);
         }
 
@@ -180,7 +206,8 @@ public class RecyclerFeedActivity extends BacNetActivity {
             super(app);
         }
 
-        @Override public void run() {
+        @Override
+        public void run() {
             py.getModule("main").callAttr("main");
         } //TODO
     }
