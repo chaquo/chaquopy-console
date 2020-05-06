@@ -54,6 +54,7 @@ public class RecyclerFeedActivity extends BacNetActivity {
                 String audience = receiver.getText().toString();
                 String content = message.getText().toString();
                 postContent(audience, content);
+                popupWindow.dismiss();
                 //System.out.println("CLICKED ON BUTTON");
             }
         });
@@ -73,7 +74,10 @@ public class RecyclerFeedActivity extends BacNetActivity {
     void postContent(String audience, String content) {
         System.out.println(audience);
         //call python
-
+        Python py = Python.getInstance();
+        PyObject x = py.getModule("main");
+        x.callAttr("append", content);
+        passLogToGUI();
     }
 
     @Override
