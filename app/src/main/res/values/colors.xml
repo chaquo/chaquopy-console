@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#E12E3657</color> <!-->top bar color-->
-    <color name="colorPrimaryDark">#000000</color> <!-->android status bar color-->
-    <color name="colorAccent">#000000</color> <!-->button color-->
+    <color name="colorPrimaryDark">#EA2A3048</color> <!-->android status bar color-->
+    <color name="colorAccent">#E12E3657</color> <!-->button color-->
 </resources>

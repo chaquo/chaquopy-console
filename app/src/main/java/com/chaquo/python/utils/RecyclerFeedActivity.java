@@ -1,12 +1,9 @@
 package com.chaquo.python.utils;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -25,19 +26,19 @@ public class RecyclerFeedActivity extends BacNetActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void openSendMessageActivity() {
         LayoutInflater inflater = (LayoutInflater)
                 getSystemService(LAYOUT_INFLATER_SERVICE);
         final View popupView = inflater.inflate(R.layout.activity_send_message, null);
-
         // create the popup window
         //int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int width = 800;
+        int width = 700;
         //int height = 950;
         boolean focusable = true; // lets taps outside the popup also dismiss it
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        popupWindow.setElevation(50);
         popupWindow.setTouchable(true);
         // show the popup window
         // which view you pass in doesn't matter, it is only used for the window tolken
@@ -80,6 +81,7 @@ public class RecyclerFeedActivity extends BacNetActivity {
         passLogToGUI();
     }
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +90,7 @@ public class RecyclerFeedActivity extends BacNetActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton2);
         fab.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
                 openSendMessageActivity();
