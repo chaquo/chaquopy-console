@@ -4,7 +4,7 @@
 
 # For documentation how to use this tool, please refer to README.md
 
-import Event  # Our representation of an feed event, please refer to Event.py
+from eventCreator import Event  # Our representation of an feed event, please refer to Event.py
 import hashlib
 import hmac
 import secrets
@@ -130,7 +130,7 @@ class EventCreationTool:
         private_key = self._load_private_key(feed_id)
         content = Event.Content(content_identifier, content_parameter)
         meta = Event.Meta(feed_id, last_sequence_number + 1,
-                          hash_of_previous_meta, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
+                                          hash_of_previous_meta, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
         signature = self._calculate_signature(private_key, meta.get_as_cbor())
         return Event.Event(meta, signature, content).get_as_cbor()
 

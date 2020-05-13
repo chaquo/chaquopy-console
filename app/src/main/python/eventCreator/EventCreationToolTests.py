@@ -2,8 +2,8 @@ import hashlib
 import nacl.signing
 import nacl.encoding
 import nacl.exceptions
-import EventCreationTool
-import Event
+from eventCreator import EventCreationTool
+from eventCreator import Event
 from com.chaquo.python import Python
 
 # LOOK AT THE README THIS FILE IS GOING TO BE THE TESTFILE LATER ON

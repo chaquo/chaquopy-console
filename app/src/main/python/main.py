@@ -7,7 +7,7 @@ from os.path import join
 import os
 import pcap
 
-import EventCreationToolTests
+from eventCreator import EventCreationToolTests
 
 import viktor
 
