@@ -7,6 +7,8 @@ from os.path import join
 import os
 import pcap
 
+import EventCreationToolTests
+
 import viktor
 
     
@@ -153,6 +155,8 @@ def main():
 		#test_db() # comment me out
 		#return # comment me out too
 		#####################################
+
+		EventCreationToolTests.main()
 
 		print("Avaliable commands: {}".format(options))
 		action = input()
