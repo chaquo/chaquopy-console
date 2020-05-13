@@ -21,6 +21,8 @@ android {
                 install "six"
                 install "pynacl"
                 install "cbor"
+                install 'sqlalchemy'
+                install 'testfixtures'
             }
         }
         ndk {
