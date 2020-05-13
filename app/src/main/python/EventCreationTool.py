@@ -62,6 +62,7 @@ class EventCreationTool:
     def set_path_to_keys(self, directory_path, relative=True):
         if relative:
             self._path_to_keys = os.path.join(os.getcwd(), directory_path)
+            print(self._path_to_keys)
         else:
             self._path_to_keys = directory_path
 
@@ -158,6 +159,8 @@ class EventCreationTool:
 
     def _load_private_key(self, feed_id):
         try:
+            print("HEEEEEEEEERE")
+            print(os.path.join(self._path_to_keys, feed_id.hex() + '.key'))
             file = open(os.path.join(self._path_to_keys, feed_id.hex() + '.key'), 'rb')
         except FileNotFoundError:
             raise KeyFileNotFoundException

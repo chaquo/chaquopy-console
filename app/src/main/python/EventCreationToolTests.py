@@ -8,6 +8,7 @@ from com.chaquo.python import Python
 
 # LOOK AT THE README THIS FILE IS GOING TO BE THE TESTFILE LATER ON
 
+FILES_DIR = str(Python.getPlatform().getApplication().getFilesDir())
 
 def verify_event(event, previous_event=None):
     if previous_event is not None:
@@ -50,16 +51,17 @@ def verify_event(event, previous_event=None):
 
 
 def main():
-    eg = EventCreationTool.EventFactory(path_to_keys=str(Python.getPlatform().getApplication().getFilesDir()), path_to_keys_relative=True)
+    eg = EventCreationTool.EventFactory(path_to_keys=str(Python.getPlatform().getApplication().getFilesDir()), path_to_keys_relative=False)
     first_event = eg.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
-    egt = EventCreationTool.EventFactory(first_event)
-    second_event = egt.next_event('whateverapp/whateveraction', {'okkey': 'xd', 382473287: 2389748293, 432787: 44})
-    third_event = egt.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
-    first_event = Event.Event.from_cbor(first_event)
-    #first_event.meta.seq_no = 4
-    first_event = first_event.get_as_cbor()
+    second_event = eg.next_event('whateverapp/whateveraction', {'okkey': 'xd', 382473287: 2389748293, 432787: 44})
+    third_event = eg.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
+    first_event_object = Event.Event.from_cbor(first_event)
+    print(first_event_object.meta.seq_no)
+    second_event_object = Event.Event.from_cbor(second_event)
+    print(second_event_object.meta.seq_no)
     third_event_object = Event.Event.from_cbor(third_event)
-    print("TOOOOLSTESTING")
     print(third_event_object.meta.seq_no)
-    print(verify_event(Event.Event.from_cbor(second_event), Event.Event.from_cbor(first_event)))
-    print(EventCreationTool.EventCreationTool.get_stored_feed_ids())
+    egt = EventCreationTool.EventFactory(path_to_keys=FILES_DIR, path_to_keys_relative=False, last_event=third_event)
+    fourth_event = egt.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
+    fourth_event_object = Event.Event.from_cbor(fourth_event)
+    print(fourth_event_object.meta.seq_no)

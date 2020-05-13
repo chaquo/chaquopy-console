@@ -156,7 +156,6 @@ def main():
 		#return # comment me out too
 		#####################################
 
-		EventCreationToolTests.main()
 
 		print("Avaliable commands: {}".format(options))
 		action = input()
@@ -164,6 +163,7 @@ def main():
 			print("Invalid command, try again")
 
 		if action == LS:
+			EventCreationToolTests.main()
 			list_directories()
 
 		if action == READ_SECRET:
