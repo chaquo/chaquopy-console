@@ -5,7 +5,9 @@ import nacl.exceptions
 from eventCreator import EventCreationTool
 from eventCreator import Event
 from com.chaquo.python import Python
+from os.path import join
 from database.upConnection import Function
+from database.database import EventHandler
 
 # LOOK AT THE README THIS FILE IS GOING TO BE THE TESTFILE LATER ON
 
@@ -53,19 +55,39 @@ def verify_event(event, previous_event=None):
 
 def main():
     eg = EventCreationTool.EventFactory(path_to_keys=str(Python.getPlatform().getApplication().getFilesDir()), path_to_keys_relative=False)
-    first_event = eg.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
-    second_event = eg.next_event('whateverapp/whateveraction', {'okkey': 'xd', 382473287: 2389748293, 432787: 44})
-    third_event = eg.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
+    first_event = eg.next_event('KotlinUI/post', {'username' : "Bob", 'publickey' : eg.get_feed_id(),
+                                                  'timestamp' : 1, 'text' : "HELOOOO"})
+    second_event = eg.next_event('KotlinUI/post', {'username' : "Bob", 'publickey' : eg.get_feed_id(),
+                                                   'timestamp' : 2, 'text' : "HELOOOO"})
+    third_event = eg.next_event('KotlinUI/post', {'username' : "Bob", 'publickey' : eg.get_feed_id(),
+                                                  'timestamp' : 3, 'text' : "HELOOOO"})
     first_event_object = Event.Event.from_cbor(first_event)
     #print(first_event_object.meta.seq_no)
     second_event_object = Event.Event.from_cbor(second_event)
     #print(second_event_object.meta.seq_no)
     third_event_object = Event.Event.from_cbor(third_event)
     #print(third_event_object.meta.seq_no)
-    egt = EventCreationTool.EventFactory(path_to_keys=FILES_DIR, path_to_keys_relative=False, last_event=third_event)
-    fourth_event = egt.next_event('whateverapp/whateveraction', {'somekey': 'somevalue', 'someotherkey': 4932})
-    fourth_event_object = Event.Event.from_cbor(fourth_event)
+    #egt = EventCreationTool.EventFactory(path_to_keys=FILES_DIR, path_to_keys_relative=False, last_event=third_event)
+    #fourth_event = egt.next_event('KotlinUI/post', {'username' : "Bob", 'publickey' : eg.get_feed_id(),
+    #                                                'timestamp' : 4, 'text' : "HELOOOO"})
+    #fourth_event_object = Event.Event.from_cbor(fourth_event)
     #print(fourth_event_object.meta.seq_no)
 
-    x = Function.Function()
-    x.insertEvent(first_event)
+    event = Event.Event.from_cbor(first_event)
+    seq_no = event.meta.seq_no
+    #feed_id = event.meta.feed_id.decode()
+    content = event.content.content
+    #print(seq_no)
+    #print(feed_id)
+    #print(content)
+
+
+    print("--------------------------------------------------")
+    DB_ABSOLUTE_PATH = join(FILES_DIR, "eventDatabase.sqlite")
+    connector = EventHandler.EventHandler(name=DB_ABSOLUTE_PATH)
+    connector.add_event(first_event)
+    connector.add_event(second_event)
+    connector.add_event(third_event)
+    #connector.add_event(fourth_event)
+    s = connector.get_all_kotlin_events(eg.get_feed_id())
+    #print(s)

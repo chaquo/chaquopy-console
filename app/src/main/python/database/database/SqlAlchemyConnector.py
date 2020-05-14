@@ -165,7 +165,7 @@ class SqLiteDatabase:
         subqry = session.query(kotlin_event).filter(feed_id == feed_id)
         liste = []
         for row in subqry:
-            liste.append((row.text, row.username, row.publickey, row.timestamp))
+            liste.append((row.text, row.username, row.publickey.hex(), row.timestamp))
 
         if liste is not None:
             return liste
@@ -183,6 +183,15 @@ class SqLiteDatabase:
             return liste
         else:
             return None
+
+
+    def get_last_kotlin_event(self):
+        session = sessionmaker(self.__db_engine)()
+        subqry = session.query(kotlin_event).order_by(kotlin_event.id.desc()).first()
+
+        result = (subqry.text, subqry.username, subqry.publickey, subqry.timestamp)
+        return result
+
 
 
 class Event(object):

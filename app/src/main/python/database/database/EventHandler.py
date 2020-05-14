@@ -6,8 +6,8 @@ from database.functions.Event import Event
 
 class EventHandler(metaclass=Singleton):
 
-    def __init__(self):
-        self.__sqlAlchemyConnector = SqLiteDatabase(SQLITE, dbname='eventDatabase.sqlite')
+    def __init__(self, name = "eventDatabase.sqlite"):
+        self.__sqlAlchemyConnector = SqLiteDatabase(SQLITE, dbname=name)
         self.__sqlAlchemyConnector.create_chat_event_table()
         self.__sqlAlchemyConnector.create_kotlin_table()
 
@@ -17,7 +17,9 @@ class EventHandler(metaclass=Singleton):
     def add_event(self, event_as_cbor):
         event = Event.from_cbor(event_as_cbor)
         seq_no = event.meta.seq_no
-        feed_id = event.meta.feed_id.decode()
+        print("here")
+        feed_id = event.meta.feed_id.hex()
+        #feed_id = event.meta.feed_id
         content = event.content.content
 
         temp = content[0].split('/')
@@ -40,6 +42,7 @@ class EventHandler(metaclass=Singleton):
                                                            username=username,
                                                            timestamp=timestamp, text=text, publickey=publickey)
 
+
     def get_event_since(self, application, timestamp, feed_id, chat_id):
         return self.__sqlAlchemyConnector.get_all_events_since(application, timestamp, feed_id, chat_id)
 
@@ -55,6 +58,8 @@ class EventHandler(metaclass=Singleton):
     def get_all_entries_by_publickey(self, publicKey):
         return self.__sqlAlchemyConnector.get_all_entries_by_publickey(publicKey)
 
+    def get_last_kotlin_event(self):
+        return self.__sqlAlchemyConnector.get_last_kotlin_event()
 
 
     def create_table_for_feed(self, feedId):
