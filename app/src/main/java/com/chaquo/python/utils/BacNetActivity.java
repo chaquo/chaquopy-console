@@ -91,6 +91,17 @@ public abstract class BacNetActivity extends AppCompatActivity
         startActivityIfNeeded(openActivity, 0);
     }
 
+    void openAccountActivity(){
+        Intent openActivity = new Intent(this, AccountActivity.class);
+        openActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(openActivity, 0);
+    }
+
+    void openFriendslistActivity(){
+        Intent openActivity = new Intent(this, FriendslistActivity.class);
+        openActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(openActivity, 0);
+    }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -102,6 +113,14 @@ public abstract class BacNetActivity extends AppCompatActivity
         }
         if (id == resId("id", "menu_Debug")) {
             openDebugActivity();
+            return true;
+        }
+        if (id == resId("id", "menu_Account")) {
+            openAccountActivity();
+            return true;
+        }
+        if (id == resId("id", "menu_Friendslist")) {
+            openFriendslistActivity();
             return true;
         }
         return false;
