@@ -114,4 +114,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_feed_tab">FeedTabActivity</string>
+    <string name="tab_text_1">My Feed </string>
+    <string name="tab_text_2">General Feed </string>
 </resources>
