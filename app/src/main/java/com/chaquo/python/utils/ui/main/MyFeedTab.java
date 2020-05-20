@@ -80,8 +80,22 @@ public class MyFeedTab extends Fragment {
         passLogToGUI();
          */
         Python py = Python.getInstance();
-        PyObject x = py.getModule("database.appconn.kotlin_connection");
-        x.callAttr("create_db");
+        //PyObject x = py.getModule("database.appconn.kotlin_connection");
+        PyObject x = py.getModule("kotlin_db_cbor_event");
+        String type = "post";
+        String username = "Benjamin";
+        String timestamp = "101010";
+        String text = "Hello world!";
+        String key_exists = "false";
+        x.callAttr("insert_cbor", type, username, timestamp, text, key_exists);
+        /*
+        PyObject x = py.getModule("kotlin_db_cbor_event");
+        x.callAttr("main");
+        x.callAttr("main");
+        x.callAttr("main");
+        x.callAttr("main");
+
+         */
     }
 
 

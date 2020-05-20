@@ -319,10 +319,9 @@ class SqLiteDatabase:
     def get_last_kotlin_event(self):
         with self.session_scope() as session:
             subqry = session.query(kotlin_event).order_by(kotlin_event.id.desc()).first()
-            if subqry.application == 'post':
-                return (subqry.application, subqry.text, subqry.timestamp, subqry.feed_id)
-            elif subqry.application == 'username':
-                return (subqry.application, subqry.username, subqry.oldusername, subqry.timestamp, subqry.feed_id)
+            res_feed_id = subqry.feed_id
+            res_seq_no = subqry.seq_no
+            return (res_feed_id, res_seq_no)
 
     """"Following comes the functionality used for the event Database regarding the chat table:"""
 

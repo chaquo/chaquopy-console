@@ -93,7 +93,8 @@ class DatabaseHandler:
         return self.__eventHandler.get_all_kotlin_events()
 
     def get_last_kotlin_event(self):
-        return self.__eventHandler.get_last_kotlin_event()
+        result = self.__eventHandler.get_last_kotlin_event()
+        return self.__byteArrayHandler.get_event(result[0], result[1])
 
     def get_trusted(self, master_id):
         return self.__eventHandler.get_trusted(master_id)

@@ -20,8 +20,9 @@ DELETE_FEED = "delete_feed"
 CREATE_FEED = "create_feed"
 APPEND = "append"
 DUMP = "dump"
+DELETE_KEYS = "delete_keys"
 
-options = [CREATE_SECRET, LS, READ_SECRET, DELETE_SECRET, CREATE_FEED, APPEND, DELETE_FEED, DUMP]
+options = [CREATE_SECRET, LS, READ_SECRET, DELETE_SECRET, CREATE_FEED, APPEND, DELETE_FEED, DUMP, DELETE_KEYS]
 
 FILES_DIR = str(Python.getPlatform().getApplication().getFilesDir())
 
@@ -149,6 +150,10 @@ def test_db():
 		print(row)
 
 
+def delete_keys():
+	todelete = join(FILES_DIR, "*.key")
+	os.remove(todelete)
+
 def main():
 	try:
 		############### DB TEST##############
@@ -161,6 +166,9 @@ def main():
 		action = input()
 		if action not in options:
 			print("Invalid command, try again")
+
+		if action == DELETE_KEYS:
+			delete_keys()
 
 		if action == LS:
 			#EventCreationToolTests.main()

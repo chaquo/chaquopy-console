@@ -2,11 +2,6 @@ from .connection import Function
 
 # TODO: Comment this class!
 
-
-def create_db():
-    function = KotlinFunction()
-    print("it worked")
-
 class KotlinFunction(Function):
 
     def __init__(self):
