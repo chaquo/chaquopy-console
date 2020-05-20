@@ -2,12 +2,33 @@ package com.chaquo.python.utils;
 
 public class FeedLog {
     public String log_name;
+    public String log_name_old;
     public String log_content;
-    public String sequence_number;
+    public String type;
+    public String timestamp;
 
-    public FeedLog(String n, String c, String t){
-        log_name = n;
-        log_content = c;
-        sequence_number = t;
+
+    private FeedLog() {
     }
+
+    public static FeedLog postLog(String name, String content, String timestamp) {
+        FeedLog f = new FeedLog();
+        f.log_name = name;
+        f.log_name_old = null;
+        f.type = "post";
+        f.log_content = content;
+        f.timestamp = timestamp;
+        return f;
+    }
+
+    public static FeedLog usernameLog(String old, String new_, String timestamp) {
+        FeedLog f = new FeedLog();
+        f.log_name = new_;
+        f.log_name_old = old;
+        f.type = "username";
+        f.log_content = old + " changed their username to " + new_ + ". ";
+        f.timestamp = timestamp;
+        return f;
+    }
+
 }

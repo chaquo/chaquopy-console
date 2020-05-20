@@ -25,6 +25,8 @@ import com.chaquo.python.utils.FeedLog;
 import com.chaquo.python.utils.MyFeedAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -83,19 +85,9 @@ public class MyFeedTab extends Fragment {
         //PyObject x = py.getModule("database.appconn.kotlin_connection");
         PyObject x = py.getModule("kotlin_db_cbor_event");
         String type = "post";
-        String username = "Benjamin";
-        String timestamp = "101010";
-        String text = "Hello world!";
-        String key_exists = "false";
-        x.callAttr("insert_cbor", type, username, timestamp, text, key_exists);
-        /*
-        PyObject x = py.getModule("kotlin_db_cbor_event");
-        x.callAttr("main");
-        x.callAttr("main");
-        x.callAttr("main");
-        x.callAttr("main");
+        String text = content;
+        x.callAttr("insert_cbor", type, text);
 
-         */
     }
 
 
@@ -126,6 +118,39 @@ public class MyFeedTab extends Fragment {
 
     public void passLogToGUI() {
 
+
+        Python py = Python.getInstance();
+        PyObject x = py.getModule("kotlin_db_cbor_event");
+        String[][] y = x.callAttr("get_my_feed_events").toJava(String[][].class);
+
+        FeedLog[] feed = new FeedLog[y.length];
+
+        int post_name = 1, post_timestamp = 2, post_content = 3;
+        int username_new = 1, username_old = 2, username_timestamp = 3;
+
+        for(int i = 0; i < y.length; i++){
+            if (y[i][0].equals("post")) {
+                String name = y[i][post_name];
+                String timestamp = y[i][post_timestamp];
+                String content = y[i][post_content];
+                FeedLog f = FeedLog.postLog(name, content, timestamp);
+                feed[i]  = f;
+            }
+            else{
+                String new_ = y[i][username_new];
+                String old = y[i][username_old];
+                String timestamp = y[i][username_timestamp];
+                FeedLog f = FeedLog.usernameLog(old, new_, timestamp);
+                feed[i]  = f;
+                }
+        }
+
+        mAdapter = new MyFeedAdapter(feed);
+        recyclerView.setAdapter(mAdapter);
+
+        }
+
+        /*
         Python py = Python.getInstance();
         PyObject x = py.getModule("main");
         String entries = x.callAttr("dumpList").toString();
@@ -139,10 +164,8 @@ public class MyFeedTab extends Fragment {
             //Log.d("informations2", feed[s.length/2-i-1].log_content);
         }
         Collections.reverse(Arrays.asList(feed));
+         */
 
-        mAdapter = new MyFeedAdapter(feed);
-        recyclerView.setAdapter(mAdapter);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

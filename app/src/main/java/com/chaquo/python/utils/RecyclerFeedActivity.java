@@ -107,6 +107,7 @@ public class RecyclerFeedActivity extends BacNetActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
+        /*
         FeedLog f1 = new FeedLog("ben hur har hir", "hello world TableLayout positions its children into rows and columns. TableLayout containers do not display border lines for their rows, columns, or cells. The table will have as many columns as the row with the most cells. A table can leave cells empty.  Cells can span  multiple columns, as they can in HTML. You can span columns by using the span field in the TableRow.LayoutParams class.  ", "10:15");
         FeedLog f2 = new FeedLog("lara", "hi there", "11:15");
         FeedLog f3 = new FeedLog("snaja", "As dawn breaks he enters " +
@@ -170,6 +171,9 @@ public class RecyclerFeedActivity extends BacNetActivity {
                 "One by one; lays them out carefully " +
                 "On the deal table, his work done.", "12:24");
 
+
+         */
+
         //mAdapter = new MyFeedAdapter(new FeedLog[] {f1, f2, f3, f4}); // TODO !!!
         //recyclerView.setAdapter(mAdapter);
 
@@ -179,12 +183,13 @@ public class RecyclerFeedActivity extends BacNetActivity {
         String y = x.callAttr("do").toString();
         textView.setText(y);*/
         //Log.d("informations1", "HEEEEY");
-        passLogToGUI();
+        //passLogToGUI();
 
     }
 
     public void passLogToGUI() {
 
+        /*
         Python py = Python.getInstance();
         PyObject x = py.getModule("main");
         String entries = x.callAttr("dumpList").toString();
@@ -200,6 +205,8 @@ public class RecyclerFeedActivity extends BacNetActivity {
 
         mAdapter = new MyFeedAdapter(feed);
         recyclerView.setAdapter(mAdapter);
+
+         */
     }
 
     @Override

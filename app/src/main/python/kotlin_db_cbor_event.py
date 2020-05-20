@@ -3,6 +3,11 @@ import database.appconn.kotlin_connection as kotlin
 import eventCreator.EventCreationTool as ect
 import eventCreator.Event as event
 from com.chaquo.python import Python
+from time import gmtime, strftime
+#import hmac
+#import nacl.signing
+#import cbor
+#import binascii
 
 #if application_action == 'post':
 #    username = content[1]['username']
@@ -27,41 +32,82 @@ from com.chaquo.python import Python
 #timestamp=timestamp, text='')
 
 
+def get_uname_by_key(db, key):
+    list = db.get_usernames_and_feed_id()
+    uname = ""
+    found = False
+    for tuple in list:
+        if str(tuple[1]) == str(key):
+            uname = str(tuple[0])
+            found = True
+            break
+    if not found:
+        return "NOT FOUND"
+    return uname
 
 
-def insert_cbor(type, username, timestamp, text, key_exists):
-    """
-
-    :param type:
-    :param username:
-    :param timestamp:
-    :param text:
-    :param key_exists:
-    :return:
-    """
-    if key_exists == "true":
-        key_exists = True
-    else:
-        key_exists = False
-
+#TODO make it such that the first event gets added as soon as the account is created or reset
+def insert_cbor(type, text):
     path = str(Python.getPlatform().getApplication().getFilesDir())
+    db = kotlin.KotlinFunction()
+    timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
+    public_keys = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
 
-    if not key_exists:
+    #if True:
+    if not public_keys:
         eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
-        db = kotlin.KotlinFunction()
         # very first event where the user get assigned the name Anonymous
         first_event = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
         db.insert_data(first_event)
 
-    print("printing last kotlin event ....")
-    print(db.get_last_kotlin_event())
-    print("last event printed")
+        # re-compute public_keys, now it should contain exactly one element
+        public_keys = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
+
+    public_key = str(public_keys[0])
+    list = db.get_usernames_and_feed_id()
+
+    uname = get_uname_by_key(db, public_key)
+
+    # this should NEVER EVER be true, EVER
+    if uname == "NOT FOUND":
+        uname = "Anonymous"
 
     eg = ect.EventFactory(last_event=db.get_last_kotlin_event(), path_to_keys= path, path_to_keys_relative= False)
     if type == "username":
-        new_event = eg.next_event("KotlinUI/username", {"newUsername": username, "oldUsername": "Anonymous", "timestamp": timestamp})
+        new_event = eg.next_event("KotlinUI/username", {"newUsername": uname, "oldUsername": "Anonymous", "timestamp": timestamp})
     else:
-        new_event = eg.next_event("KotlinUI/post", {"username": username, "timestamp": timestamp, "text": text})
+        new_event = eg.next_event("KotlinUI/post", {"username": uname, "timestamp": timestamp, "text": text})
     db.insert_data(new_event)
 
-    print("it worked")
+    #print("it worked")
+
+# DANGER: this only works if a public key already exists
+def get_my_feed_events():
+    path = str(Python.getPlatform().getApplication().getFilesDir())
+    public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)[0]
+
+    db = kotlin.KotlinFunction()
+    query_output = db.get_all_entries_by_feed_id(public_key)
+    pretty_output = []
+    uname = get_uname_by_key(db, public_key)
+    for tuple in query_output:
+        type = tuple[0]
+        if type == "post":
+            timestamp = tuple[2]
+            text = tuple[1]
+            t = (type, uname, timestamp, text)
+        elif type == "username":
+            new = tuple[1]
+            old = tuple[2]
+            timestamp = tuple[3]
+            t = (type, new, old, timestamp)
+
+        pretty_output.append(t)
+
+    #print("query output")
+    #print(query_output)
+    #print("printing output")
+    #print(pretty_output)
+    return pretty_output
+
+

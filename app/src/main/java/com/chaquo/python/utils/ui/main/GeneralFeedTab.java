@@ -38,6 +38,7 @@ public class GeneralFeedTab extends Fragment {
 
     public void passLogToGUI() {
 
+        /*
         Python py = Python.getInstance();
         PyObject x = py.getModule("main");
         String entries = x.callAttr("dumpList").toString();
@@ -53,6 +54,8 @@ public class GeneralFeedTab extends Fragment {
 
         mAdapter = new MyFeedAdapter(feed);
         recyclerView.setAdapter(mAdapter);
+
+         */
     }
 
     @Override
