@@ -12,7 +12,7 @@ public class PageViewModel extends ViewModel {
     private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
-            if (input == 1)
+            if (input == 0)
                 return "my feed";
             return "general feed";
         }
