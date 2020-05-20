@@ -145,6 +145,8 @@ public class MyFeedTab extends Fragment {
                 }
         }
 
+        Collections.reverse(Arrays.asList(feed));
+
         mAdapter = new MyFeedAdapter(feed);
         recyclerView.setAdapter(mAdapter);
 
