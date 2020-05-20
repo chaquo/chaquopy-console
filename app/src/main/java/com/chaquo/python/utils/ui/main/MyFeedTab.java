@@ -73,11 +73,17 @@ public class MyFeedTab extends Fragment {
     void postContent(String audience, String content) {
         System.out.println(audience);
         //call python
+        /*
         Python py = Python.getInstance();
         PyObject x = py.getModule("main");
         x.callAttr("append", content);
         passLogToGUI();
+         */
+        Python py = Python.getInstance();
+        PyObject x = py.getModule("database.appconn.kotlin_connection");
+        x.callAttr("create_db");
     }
+
 
 
 

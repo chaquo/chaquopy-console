@@ -7,7 +7,7 @@ from os.path import join
 import os
 import pcap
 
-from eventCreator import EventCreationToolTests
+#from eventCreator import EventCreationToolTests
 
 import viktor
 
@@ -163,7 +163,7 @@ def main():
 			print("Invalid command, try again")
 
 		if action == LS:
-			EventCreationToolTests.main()
+			#EventCreationToolTests.main()
 			list_directories()
 
 		if action == READ_SECRET:
