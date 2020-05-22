@@ -21,7 +21,7 @@ DELETE_PUBLIC_KEYS = "del pks"
 GET_USERNAME = "gu"
 LS = "ls"
     
-options = [LIST_PUBLIC_KEYS, GET_USERNAME, DELETE_PUBLIC_KEYS]
+options = [LIST_PUBLIC_KEYS, GET_USERNAME, DELETE_PUBLIC_KEYS, LS]
 
 FILES_DIR = str(Python.getPlatform().getApplication().getFilesDir())
 
