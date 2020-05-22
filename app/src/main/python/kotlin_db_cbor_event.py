@@ -4,6 +4,8 @@ import eventCreator.EventCreationTool as ect
 import eventCreator.Event as event
 from com.chaquo.python import Python
 from time import gmtime, strftime
+import main
+
 #import hmac
 #import nacl.signing
 #import cbor
@@ -30,6 +32,14 @@ from time import gmtime, strftime
 #application=application_action,
 #username=username, oldusername=oldusername,
 #timestamp=timestamp, text='')
+
+def change_uname(new_uname):
+    path = str(Python.getPlatform().getApplication().getFilesDir())
+    db = kotlin.KotlinFunction()
+    eg = ect.EventFactory(last_event=db.get_last_kotlin_event(), path_to_keys= path, path_to_keys_relative= False)
+    timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
+    uname_event = eg.next_event("KotlinUI/username", {"newUsername": new_uname, "oldUsername": main.get_uname(), "timestamp": timestamp})
+    db.insert_data(uname_event)
 
 
 def get_uname_by_key(db, key):
