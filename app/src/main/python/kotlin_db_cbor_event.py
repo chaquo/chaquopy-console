@@ -94,7 +94,20 @@ def insert_cbor(type, text):
 # DANGER: this only works if a public key already exists
 def get_my_feed_events():
     path = str(Python.getPlatform().getApplication().getFilesDir())
-    public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)[0]
+    public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
+
+    if not public_key:
+        db = kotlin.KotlinFunction()
+        timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
+        eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
+        # very first event where the user get assigned the name Anonymous
+        first_event = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+        db.insert_data(first_event)
+
+        # re-compute public_keys, now it should contain exactly one element
+        public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
+
+    public_key = public_key[0]
 
     db = kotlin.KotlinFunction()
     query_output = db.get_all_entries_by_feed_id(public_key)
@@ -120,4 +133,32 @@ def get_my_feed_events():
     #print(pretty_output)
     return pretty_output
 
+
+
+def get_all_feed_events():
+    path = str(Python.getPlatform().getApplication().getFilesDir())
+    #public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)[0]
+
+    db = kotlin.KotlinFunction()
+    query_output = db.get_all_kotlin_events()
+    pretty_output = []
+    for tuple in query_output:
+        type = tuple[0]
+        if type == "post":
+            timestamp = tuple[2]
+            text = tuple[1]
+            t = (type, get_uname_by_key(db, tuple[3]), timestamp, text)
+        elif type == "username":
+            new = tuple[1]
+            old = tuple[2]
+            timestamp = tuple[3]
+            t = (type, new, old, timestamp)
+
+        pretty_output.append(t)
+
+    #print("query output")
+    #print(query_output)
+    #print("printing output")
+    #print(pretty_output)
+    return pretty_output
 

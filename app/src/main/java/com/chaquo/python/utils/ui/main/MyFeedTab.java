@@ -33,6 +33,7 @@ import java.util.Collections;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class MyFeedTab extends Fragment {
+
     private View v;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -88,6 +89,7 @@ public class MyFeedTab extends Fragment {
         String text = content;
         x.callAttr("insert_cbor", type, text);
 
+        passLogToGUI();
     }
 
 

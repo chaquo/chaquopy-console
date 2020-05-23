@@ -66,17 +66,20 @@ def get_uname():
 	path = str(Python.getPlatform().getApplication().getFilesDir())
 	public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
 	if not public_key:
-		return "NOT FOUND"
+		return "NOT FOUND - PUBLIC KEY ARRAY EMPTY"
 	else: public_key = public_key[0]
 
 	db = kotlin.KotlinFunction()
 
 	list = db.get_usernames_and_feed_id()
+	print(len(list))
 	for tuple in list:
+			#print("comparing {} to {}".format(str(tuple[1]), str(public_key)))
+			#print(str(tuple[1]))
 			if str(tuple[1]) == str(public_key):
 				uname = str(tuple[0])
 				return uname
-	return "NOT FOUND"
+	return "NOT FOUND - USER NOT IN DB"
 
 
 

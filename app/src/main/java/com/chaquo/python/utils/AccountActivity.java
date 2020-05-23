@@ -19,6 +19,7 @@ import com.chaquo.python.Python;
 import com.chaquo.python.console.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -42,7 +43,7 @@ public class AccountActivity extends BacNetActivity {
         setText();
         setName();
 
-        Button button =  findViewById(R.id.update_button);
+        FloatingActionButton button =  findViewById(R.id.floatingActionButton_updateUsername);
         button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -59,18 +60,25 @@ public class AccountActivity extends BacNetActivity {
         Python py = Python.getInstance();
         PyObject x = py.getModule("main");
         String uname = x.callAttr("get_uname").toString();
-        TextView print_uname_text = findViewById(R.id.username_print);
-        print_uname_text.setText("Your username is " + uname);
+        //TextView print_uname_text = findViewById(R.id.username_print);
+        //print_uname_text.setText("Your username is " + uname);
     }
 
     //TODO
     public void updateUsername(){
         Python py = Python.getInstance();
         PyObject x = py.getModule("kotlin_db_cbor_event");
-        EditText new_uname_field = findViewById(R.id.update_uname_field);
-        String new_unmae = new_uname_field.getText().toString();
-        x.callAttr("change_uname", new_unmae);
+        TextInputLayout new_uname_field = findViewById(R.id.changeUsernameText);
+        String new_unmae = new_uname_field.getEditText().getText().toString();
 
+
+        PyObject y = py.getModule("main");
+        String old = y.callAttr("get_uname").toString();
+        if(new_unmae.equals(old)){
+            return;
+        }
+
+        x.callAttr("change_uname", new_unmae);
         //System.out.println("hello from the other side");
         setName();
     }
@@ -110,7 +118,7 @@ public class AccountActivity extends BacNetActivity {
     }
 
     public void setText() {
-        TextView keyInfos = findViewById(R.id.keyPublicPrivate);
+        TextView keyInfos = findViewById(R.id.publicKey);
         keyInfos.setText(publicKey);
     }
 
