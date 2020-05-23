@@ -10,10 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name="com.chaquo.python.utils.FeedTabActivity"
-            android:label="@string/title_activity_feed_tab"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name="com.chaquo.python.utils.FeedTabActivity" />
         <activity
             android:name="com.chaquo.python.utils.FriendslistActivity"
             android:label="@string/title_activity_friendslist"

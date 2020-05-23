@@ -1,5 +1,6 @@
 package com.chaquo.python.utils;
 
+import android.app.Application;
 import android.os.Bundle;
 
 import com.chaquo.python.console.R;
@@ -18,7 +19,7 @@ import android.view.View;
 
 import com.chaquo.python.utils.ui.main.SectionsPagerAdapter;
 
-public class FeedTabActivity extends AppCompatActivity {
+public class FeedTabActivity extends BacNetActivity {
     //private RecyclerView myFeedTab;
     //private RecyclerView.Adapter mAdapter;
     //private RecyclerView.LayoutManager layoutManager;
@@ -36,5 +37,21 @@ public class FeedTabActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
+    }
+
+    public static class Task extends DebugActivity.Task {
+        public Task(Application app) {
+            super(app);
+        }
+
+        @Override
+        public void run() {
+            py.getModule("main").callAttr("main");
+        } //TODO
+    }
+
+    @Override
+    protected Class<? extends RecyclerFeedActivity.Task> getTaskClass() {
+        return RecyclerFeedActivity.Task.class;
     }
 }
