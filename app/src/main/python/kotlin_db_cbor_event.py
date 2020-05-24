@@ -53,7 +53,7 @@ def change_uname(new_uname):
     db = kotlin.KotlinFunction()
     eg = ect.EventFactory(last_event=db.get_last_kotlin_event(), path_to_keys= path, path_to_keys_relative= False)
     timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
-    uname_event = eg.next_event("KotlinUI/username", {"newUsername": new_uname, "oldUsername": main.get_uname(), "timestamp": timestamp})
+    uname_event = eg.next_event("KotlinUI/username", {"newUsername": new_uname, "oldUsername": get_uname_by_key(db, get_pk()), "timestamp": timestamp})
     db.insert_data(uname_event)
 
 def get_all_usernames():
