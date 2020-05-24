@@ -20,22 +20,24 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
     private final Context mContext;
+    private MyFeedTab myfeed;
+    private GeneralFeedTab generalfeed;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
+        myfeed = new MyFeedTab();
+        generalfeed = new GeneralFeedTab();
     }
 
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        Fragment f = null;
         if (position == 0){
-            f = new MyFeedTab();
+            return myfeed;
         }
-            else f = new GeneralFeedTab();
-        return f;
+            return  generalfeed;
     }
 
     @Nullable

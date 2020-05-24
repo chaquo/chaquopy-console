@@ -92,6 +92,18 @@ public class MyFeedTab extends Fragment {
         passLogToGUI();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        try {
+            if (isVisibleToUser) {
+                passLogToGUI();
+            }
+        }
+        catch (Exception e){
+            ;
+        }
+    }
 
 
 

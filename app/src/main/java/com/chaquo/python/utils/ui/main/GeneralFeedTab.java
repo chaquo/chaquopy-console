@@ -93,6 +93,13 @@ public class GeneralFeedTab extends Fragment {
     }
 
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            passLogToGUI();
+        }
+    }
 
 
     @Nullable
