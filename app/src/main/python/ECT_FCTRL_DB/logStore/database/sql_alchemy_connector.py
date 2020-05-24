@@ -72,13 +72,10 @@ class SqLiteDatabase:
 
     def get_current_event_as_cbor(self, feed_id):
         with self.session_scope() as session:
-            subqry = session.query(func.max(cbor_event.seq_no)).filter(feed_id == feed_id)
-            qry = session.query(cbor_event).filter(cbor_event.feed_id == feed_id, cbor_event.seq_no == subqry)
-            res = qry.first()
+            res = session.query(cbor_event).filter(cbor_event.feed_id == feed_id).all()  # noqa: E711
             if res is not None:
-                return res.event_as_cbor
-            else:
-                return None
+                return res[-1].event_as_cbor
+            return None
 
     def get_all_feed_ids(self):
         with self.session_scope() as session:
