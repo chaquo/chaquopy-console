@@ -21,6 +21,9 @@ import com.chaquo.python.Python;
 import com.chaquo.python.console.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class FriendslistActivity extends BacNetActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -47,22 +50,40 @@ public class FriendslistActivity extends BacNetActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
+        passFriendsToGUI();
+
+    }
+
+    public void passFriendsToGUI() {
+        /*
         Person p1 = new Person("Travis");
         Person p2 = new Person("Nour");
         Person p3 = new Person("Sanja");
         Person[] p = {p1, p2, p3};
-        passFriendsToGUI(p);
+        */
 
-    }
 
-    public void passFriendsToGUI(Person[] p) {
-        mAdapter = new PersonListAdapter(p);
+        Python py = Python.getInstance();
+        PyObject x = py.getModule("kotlin_db_cbor_event");
+        String[] y = x.callAttr("get_all_usernames").toJava(String[].class);
+
+        Person[] persons = new Person[y.length];
+
+        for(int i = 0; i < y.length; i++){
+                String name = y[i];
+                persons[i]  = new Person(name);
+        }
+
+        Collections.reverse(Arrays.asList(persons));
+
+        mAdapter = new PersonListAdapter(persons);
         recyclerView.setAdapter(mAdapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        passFriendsToGUI();
     }
 
     public static class Task extends DebugActivity.Task {

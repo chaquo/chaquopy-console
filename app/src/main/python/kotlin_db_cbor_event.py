@@ -41,6 +41,14 @@ def change_uname(new_uname):
     uname_event = eg.next_event("KotlinUI/username", {"newUsername": new_uname, "oldUsername": main.get_uname(), "timestamp": timestamp})
     db.insert_data(uname_event)
 
+def get_all_usernames():
+    db = kotlin.KotlinFunction()
+    list = []
+    print(db.get_usernames_and_feed_id())
+    for tuple in db.get_usernames_and_feed_id():
+        name, key = tuple
+        list.append(name)
+    return list
 
 def get_uname_by_key(db, key):
     list = db.get_usernames_and_feed_id()
