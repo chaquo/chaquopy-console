@@ -1,12 +1,13 @@
 from ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler import UiFunctionHandler
-from feedCtrl.uiFunctionsHandler import generate_test_data  # noqa: F401
-from ECT_FCTRL_DB.feedCtrl import ui
-from logStore.verific.verify_insertion import Verification  # noqa: F401
-from logStore.funcs.EventCreationTool import EventFactory  # noqa: F401
-from logStore.appconn.feed_ctrl_connection import FeedCtrlConnection  # noqa: F401
+from ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler import generate_test_data  # noqa: F401
+#WE COMMENTED
+#from ECT_FCTRL_DB.feedCtrl import ui
+from ECT_FCTRL_DB.logStore.verific.verify_insertion import Verification  # noqa: F401
+from ECT_FCTRL_DB.logStore.funcs.EventCreationTool import EventFactory  # noqa: F401
+from ECT_FCTRL_DB.logStore.appconn.feed_ctrl_connection import FeedCtrlConnection  # noqa: F401
 import secrets
 from nacl.signing import SigningKey
-from logStore.funcs.log import create_logger
+from ECT_FCTRL_DB.logStore.funcs.log import create_logger
 import sys
 
 logger = create_logger('test_feed_ctrl_connection')
@@ -124,7 +125,7 @@ if __name__ == '__main__':
     print("arg: " + sys.argv[1])
     if sys.argv[1] == 'cli':
         cli()
-
-    elif sys.argv[1] == 'ui':
-        ui.run()
+    #WE COMMENTED
+    #elif sys.argv[1] == 'ui':
+    #    ui.run()
 
