@@ -1,5 +1,5 @@
-from logStore.appconn.feed_ctrl_connection import FeedCtrlConnection
-from logStore.funcs.log import create_logger
+from ECT_FCTRL_DB.logStore.appconn.feed_ctrl_connection import FeedCtrlConnection
+from ECT_FCTRL_DB.logStore.funcs.log import create_logger
 
 logger = create_logger('Radius')
 

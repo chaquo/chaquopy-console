@@ -82,3 +82,6 @@ class DatabaseConnector:
         @:returns True if this feed id is whitelisted or False if not
         """
         return self.__verifier.check_outgoing(feed_id)
+
+    def get_master_feed_id(self):
+        return self.__handler.get_host_master_id()

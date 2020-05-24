@@ -8,8 +8,45 @@ from time import gmtime, strftime
 import main
 
 
+
 def start():
     feedCTRL.cli('')
+    #print("feed control control")
+    #return
+    path = str(Python.getPlatform().getApplication().getFilesDir())
+    db = kotlin.KotlinFunction()
+    db.get_host_master_id()
+    timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
+    public_keys = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
+
+    if len(public_keys) <= 1:
+        eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
+
+        # VERY first event (for feedCTRL)
+        #first_event = eg.next_event('KotlinUI/MASTER', {'master_feed': eg.get_feed_id()})
+        first_event = eg.first_event('KotlinUI', db.get_host_master_id())
+        #first_event = eg.first_event('KotlinUI', eg.get_feed_id())
+        #first_event = eg.next_event('KotlinUI', eg.get_feed_id())
+
+        db.insert_data(first_event)
+        first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+        db.insert_data(first_event_byApp)
+
+    feedCTRL.cli('-t 0 0')
+    feedCTRL.cli('-t 0 1')
+    feedCTRL.cli('-t 1 0')
+    feedCTRL.cli('-t 1 1')
+
+    print("printing the len of public keys")
+    print(len(public_keys))
+    print("finished printing len of public keys")
+    print("This should contain AT LEAST 2 events")
+    print(db.get_all_kotlin_events())
+    print("-----------------------")
+
+    #feedCTRL.cli('')
+
+
 
 def change_uname(new_uname):
     path = str(Python.getPlatform().getApplication().getFilesDir())
@@ -81,30 +118,31 @@ def insert_cbor(type, text):
 
     #print("it worked")
 
+def get_pk():
+    db = kotlin.KotlinFunction()
+    path = str(Python.getPlatform().getApplication().getFilesDir())
+    print("printing both keys in get_pk()")
+    public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
+    print(public_key)
+    if str(public_key[0]) == str(db.get_host_master_id()):
+        return public_key[1]
+    return public_key[0]
+
+
 # DANGER: this only works if a public key already exists
 def get_my_feed_events():
     path = str(Python.getPlatform().getApplication().getFilesDir())
-    public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
-    if not public_key:
-        db = kotlin.KotlinFunction()
-        timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
-        eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
-        # VERY first event (for feedCTRL)
-        first_event = eg.first_event('KotlinUI', db.get_host_master_id())
-        db.insert_data(first_event)
-        # first event (INSERTED BY user) where the user get assigned the name Anonymous
-        first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
-        db.insert_data(first_event_byApp)
-
-        # re-compute public_keys, now it should contain exactly one element
-        public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
-
-    public_key = public_key[0]
+    public_key = get_pk()
 
     db = kotlin.KotlinFunction()
+
     print("printing master id")
     print(db.get_host_master_id().hex())
     print("----------------------------------------------------------------")
+    print("printing public key")
+    print(public_key.hex())
+    print("----------------------------------------------------------------")
+
     query_output = db.get_all_entries_by_feed_id(public_key)
     pretty_output = []
     uname = get_uname_by_key(db, public_key)
@@ -122,10 +160,13 @@ def get_my_feed_events():
 
         pretty_output.append(t)
 
-    print('printing last kotlin event-------------------')
-    event = Event.Event.from_cbor(db.get_last_kotlin_event())
-    print(event.meta.seq_no)
-    print('------------------------------------------------------------------------')
+    #print('printing last kotlin event-------------------')
+    #event = Event.Event.from_cbor(db.get_last_kotlin_event())
+    print("printing all kotlin events")
+    print(db.get_all_kotlin_events())
+    print("finished printing kotlin events")
+    #print(event.meta.seq_no)
+    #print('------------------------------------------------------------------------')
     #print("query output")
     #print(query_output)
     #print("printing output")

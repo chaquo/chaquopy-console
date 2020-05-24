@@ -1,10 +1,10 @@
 from ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler import UiFunctionHandler
-from ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler import generate_test_data  # noqa: F401
-#WE COMMENTED
-#from ECT_FCTRL_DB.feedCtrl import ui
-from ECT_FCTRL_DB.logStore.verific.verify_insertion import Verification  # noqa: F401
-from ECT_FCTRL_DB.logStore.funcs.EventCreationTool import EventFactory  # noqa: F401
-from ECT_FCTRL_DB.logStore.appconn.feed_ctrl_connection import FeedCtrlConnection  # noqa: F401
+#from ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler import generate_test_data  # noqa: F401
+##WE COMMENTED
+##from ECT_FCTRL_DB.feedCtrl import ui
+#from ECT_FCTRL_DB.logStore.verific.verify_insertion import Verification  # noqa: F401
+#from ECT_FCTRL_DB.logStore.funcs.EventCreationTool import EventFactory  # noqa: F401
+#from ECT_FCTRL_DB.logStore.appconn.feed_ctrl_connection import FeedCtrlConnection  # noqa: F401
 import secrets
 from nacl.signing import SigningKey
 from ECT_FCTRL_DB.logStore.funcs.log import create_logger
@@ -37,6 +37,8 @@ def cli(inp):
     blocked = set(ufh.get_blocked())
     hostID = ufh.get_host_master_id()
     masterIDs = ufh.get_master_ids()
+    #print("printing masterIDs")
+    #print(masterIDs)
     radius = ufh.get_radius()
 
     print("Welcome to the Feed Control Demo! \n")
