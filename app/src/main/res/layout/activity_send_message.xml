@@ -10,7 +10,7 @@
         android:id="@+id/send_post_content"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:hint="What's on your mind?"
+        android:hint="What's on your mind...?"
         tools:ignore="LabelFor"
         android:background="@null" />
 
