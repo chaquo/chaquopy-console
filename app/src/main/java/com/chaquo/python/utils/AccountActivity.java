@@ -72,7 +72,7 @@ public class AccountActivity extends BacNetActivity {
         String new_uname = new_uname_field.getEditText().getText().toString();
 
 
-        PyObject y = py.getModule("main");
+        PyObject y = py.getModule("kotlin_db_cbor_event");
         String old = y.callAttr("get_uname").toString();
         if(new_uname.equals(old)){
             return;
@@ -101,6 +101,10 @@ public class AccountActivity extends BacNetActivity {
     }
 
     public void getAndSetPublicKey() {
+        Python py = Python.getInstance();
+        PyObject x = py.getModule("kotlin_db_cbor_event");
+        String s = x.callAttr("gui_get_pk").toString();
+        /* Sorry!
         FileFilter fileFilter = new FileFilter(fileExtension);
         File parentDir = new File(keyDirectory);
         // Put the names of all files ending with .txt in a String array
@@ -117,6 +121,8 @@ public class AccountActivity extends BacNetActivity {
             s = s + file;
             System.out.println(absoluteFilePath);
         }
+
+         */
         publicKey = s;
     }
 

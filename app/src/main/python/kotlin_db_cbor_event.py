@@ -8,7 +8,6 @@ from time import gmtime, strftime
 import main
 
 
-
 def start():
     feedCTRL.cli('')
     #print("feed control control")
@@ -128,6 +127,16 @@ def get_pk():
         return public_key[1]
     return public_key[0]
 
+def gui_get_pk():
+    db = kotlin.KotlinFunction()
+    path = str(Python.getPlatform().getApplication().getFilesDir())
+    print("printing both keys in get_pk()")
+    public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
+    print(public_key)
+    if str(public_key[0]) == str(db.get_host_master_id()):
+        return public_key[1].hex()
+    return public_key[0].hex()
+
 
 # DANGER: this only works if a public key already exists
 def get_my_feed_events():
@@ -201,4 +210,11 @@ def get_all_feed_events():
     #print("printing output")
     #print(pretty_output)
     return pretty_output
+
+
+def get_uname():
+    db = kotlin.KotlinFunction()
+    pk = get_pk()
+    return get_uname_by_key(db, pk)
+
 

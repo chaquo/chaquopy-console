@@ -26,7 +26,14 @@ public class FeedLog {
         f.log_name = new_;
         f.log_name_old = old;
         f.type = "username";
-        f.log_content = old + " changed their username to " + new_ + ". ";
+
+        if(old.equals("")){
+           f.log_content = "A new user just joined BACnet++!";
+        }
+        else {
+            f.log_content = old + " changed their username to " + new_ + ". ";
+        }
+
         f.timestamp = timestamp;
         return f;
     }
