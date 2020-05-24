@@ -124,7 +124,7 @@ class SqLiteDatabase:
                 if subqry[0] is not None:
                     q1 = session.query(func.max(master_event.seq_no), master_event).filter(
                         master_event.trust_feed_id == subqry[0])
-                    if q1[0] is not None and q1[0][1].trust == True:
+                    if q1[0] is not None and q1[0][1].trust == True:  # noqa: E712
                         feed_ids.append(q1[0][1].trust_feed_id)
             return feed_ids
 
@@ -136,7 +136,7 @@ class SqLiteDatabase:
                 if subqry[0] is not None:
                     q1 = session.query(func.max(master_event.seq_no), master_event).filter(
                         master_event.trust_feed_id == subqry[0])
-                    if q1[0] is not None and q1[0][1].trust == False:
+                    if q1[0] is not None and q1[0][1].trust is False:
                         feed_ids.append(q1[0][1].trust_feed_id)
             return feed_ids
 
@@ -146,8 +146,8 @@ class SqLiteDatabase:
             master_id = self.get_host_master_id()
             if master_id is None:
                 return None
-            for master_id in session.query(master_event.feed_id).filter(master_event.master == True,
-                                                                        master_event.feed_id != master_id):
+            for master_id in session.query(master_event.feed_id).filter(master_event.master == True,  # noqa: E712
+                                                                        master_event.feed_id != master_id):  # noqa: E712
                 if master_id is not None:
                     master_ids.append(master_id[0])
             return master_ids
@@ -163,7 +163,8 @@ class SqLiteDatabase:
 
     def get_username(self, master_id):
         with self.session_scope() as session:
-            res = session.query(master_event.name).filter(master_event.feed_id == master_id, master_event.name != None).all()
+            res = session.query(master_event.name).filter(master_event.feed_id == master_id,
+                                                          master_event.name != None).all()  # noqa: E711
             if res is not None:
                 return res[-1][0]
             return None
@@ -182,7 +183,7 @@ class SqLiteDatabase:
 
     def get_host_master_id(self):
         with self.session_scope() as session:
-            master_id = session.query(master_event.feed_id).filter(master_event.master == True).first()
+            master_id = session.query(master_event.feed_id).filter(master_event.master == True).first()  # noqa: E712
             if master_id is not None:
                 return master_id[0]
             return None
@@ -237,7 +238,10 @@ class SqLiteDatabase:
 
     def set_feed_ids_radius(self, feed_id, radius):
         with self.session_scope() as session:
-            rad = session.query(master_event.radius).filter(master_event.feed_id == feed_id, master_event.seq_no == 1).update({master_event.radius: radius})
+            rad = session.query(master_event.radius).filter(master_event.feed_id == feed_id,
+                                                            master_event.seq_no == 1).update(
+                {master_event.radius: radius})
+            return rad
 
     """"Following comes the functionality used for the event Database regarding the kotlin table:"""
 
@@ -300,7 +304,6 @@ class SqLiteDatabase:
             else:
                 return None
 
-    # TODO: Where is the difference between those two?
     def get_all_entries_by_feed_id(self, feed_id):
         with self.session_scope() as session:
             subqry = session.query(kotlin_event).filter(kotlin_event.feed_id == feed_id)
@@ -381,7 +384,7 @@ class SqLiteDatabase:
         except Exception as e:
             logger.error(e)
             session.rollback()
-            raise
+            return -1
         finally:
             session.close()
 

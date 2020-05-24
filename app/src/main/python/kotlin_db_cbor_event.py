@@ -1,7 +1,6 @@
 # not static
-import database.appconn.kotlin_connection as kotlin
-import eventCreator.EventCreationTool as ect
-import eventCreator.Event as event
+import ECT_FCTRL_DB.logstore.appconn.kotlin_connection as kotlin
+import ECT_FCTRL_DB.eventCreationTool.EventCreationTool as ect
 from com.chaquo.python import Python
 from time import gmtime, strftime
 import main
@@ -74,9 +73,11 @@ def insert_cbor(type, text):
     #if True:
     if not public_keys:
         eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
-        # very first event where the user get assigned the name Anonymous
-        first_event = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
-        db.insert_data(first_event)
+        # first event for feedCTRL
+        first_event = eg.first_event('KotlinUI', db.get_host_master_id)
+        # very first event (INSERTED BY APP) where the user get assigned the name Anonymous
+        first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+        db.insert_data(first_event_byApp)
 
         # re-compute public_keys, now it should contain exactly one element
         public_keys = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)

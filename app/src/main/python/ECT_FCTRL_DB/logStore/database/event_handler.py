@@ -6,7 +6,6 @@ from ..funcs.log import create_logger
 from os.path import join
 from com.chaquo.python import Python
 
-
 logger = create_logger('EventHandler')
 
 
@@ -15,10 +14,11 @@ class EventHandler(metaclass=Singleton):
     def __init__(self):
         DB_PATH = str(Python.getPlatform().getApplication().getFilesDir())
         DB_PATH = join(DB_PATH, "KotlinDB.sqlite")
-        self.__sqlAlchemyConnector = SqLiteDatabase(SQLITE, dbname=DB_PATH)
-        self.__sqlAlchemyConnector.create_chat_event_table()
-        self.__sqlAlchemyConnector.create_kotlin_table()
-        self.__sqlAlchemyConnector.create_master_table()
+        self.sqlAlchemyConnector = SqLiteDatabase(SQLITE, dbname=DB_PATH)
+        self.sqlAlchemyConnector.create_chat_event_table()
+        self.sqlAlchemyConnector.create_kotlin_table()
+        self.sqlAlchemyConnector.create_master_table()
+
 
     def add_event(self, event_as_cbor):
         event = Event.from_cbor(event_as_cbor)
@@ -82,7 +82,7 @@ class EventHandler(metaclass=Singleton):
     def get_last_kotlin_event(self):
         return self.__sqlAlchemyConnector.get_last_kotlin_event()
 
-    """"Structure of insert_master_event: 
+    """"Structure of insert_master_event:
     insert_master_event(self, master, feed_id, app_feed_id, trust_feed_id, seq_no, trust, name, radius, event_as_cbor, app_name)"""
 
     def master_handler(self, seq_no, feed_id, content, cont_ident, event_as_cbor):
@@ -94,9 +94,15 @@ class EventHandler(metaclass=Singleton):
         elif event == 'Trust':
             self.__sqlAlchemyConnector.insert_master_event(False, feed_id, None, content[1]['feed_id'], seq_no, True,
                                                            None, None, event_as_cbor, None)
+            from feedCtrl.radius import Radius
+            r = Radius()
+            r.calculate_radius()
         elif event == 'Block':
             self.__sqlAlchemyConnector.insert_master_event(False, feed_id, None, content[1]['feed_id'], seq_no, False,
                                                            None, None, event_as_cbor, None)
+            from feedCtrl.radius import Radius
+            r = Radius()
+            r.calculate_radius()
         elif event == 'Name':
             self.__sqlAlchemyConnector.insert_master_event(False, feed_id, None, None, seq_no, None,
                                                            content[1]['name'], None, event_as_cbor, None)

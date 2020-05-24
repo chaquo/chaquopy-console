@@ -6,7 +6,6 @@ from ..funcs.event import Event
 from os.path import join
 from com.chaquo.python import Python
 
-
 logger = create_logger('ByteArrayHandler')
 """The byte array handler allows the database handler to insert a new event into the cbor database.
 
@@ -26,8 +25,8 @@ class ByteArrayHandler(metaclass=Singleton):
     def __init__(self):
         DB_PATH = str(Python.getPlatform().getApplication().getFilesDir())
         DB_PATH = join(DB_PATH, "cborDatabase.sqlite")
-        self.__sqlAlchemyConnector = SqLiteDatabase(SQLITE, dbname=DB_PATH)
-        self.__sqlAlchemyConnector.create_cbor_db_tables()
+        self.sqlAlchemyConnector = SqLiteDatabase(SQLITE, dbname=DB_PATH)
+        self.sqlAlchemyConnector.create_cbor_db_tables()
 
     def insert_byte_array(self, event_as_cbor):
         """"Insert a new event into the database. For this we extract the sequence number and feed_id and store the

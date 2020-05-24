@@ -1,10 +1,10 @@
 # This is a wrapper for simple BACnet event handling provided by group 4 logMerge
 # Authors: Günes Aydin, Joey Zgraggen, Nikodem Kernbach
-# VERSION: 1.3
+# VERSION: 1.5
 
 # For documentation how to use this tool, please refer to README.md
 
-from eventCreator import Event  # Our representation of an feed event, please refer to Event.py
+import Event  # Our representation of an feed event, please refer to Event.py
 import hashlib
 import hmac
 import secrets
@@ -62,7 +62,6 @@ class EventCreationTool:
     def set_path_to_keys(self, directory_path, relative=True):
         if relative:
             self._path_to_keys = os.path.join(os.getcwd(), directory_path)
-            print(self._path_to_keys)
         else:
             self._path_to_keys = directory_path
 
@@ -94,9 +93,9 @@ class EventCreationTool:
     def get_supported_signing_algorithms(self):
         return self._SIGN_INFO.keys()
 
-    def generate_feed_and_create_first_event(self, content_identifier, content_parameter):
+    def generate_feed_and_create_first_event(self, app_name, master_feed_id):
         public_key = self.generate_feed()
-        return self.create_first_event(public_key, content_identifier, content_parameter)
+        return self.create_first_event(public_key, app_name, master_feed_id)
 
     def generate_feed(self):
         private_key = secrets.token_bytes(32)
@@ -111,12 +110,14 @@ class EventCreationTool:
             file.write(private_key)
         return public_key
 
-    def create_first_event(self, feed_id, content_identifier, content_parameter):
+    def create_first_event(self, feed_id, app_name, master_feed_id):
+        if not isinstance(master_feed_id, bytes):
+            raise IllegalArgumentTypeException
         if isinstance(feed_id, str):
             feed_id = bytes.fromhex(feed_id)
         elif not isinstance(feed_id, bytes):
             raise IllegalArgumentTypeException
-        content = Event.Content(content_identifier, content_parameter)
+        content = Event.Content(app_name + "/MASTER", {'master_feed': master_feed_id})
         meta = Event.Meta(feed_id, 0, None, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
         signature = self._calculate_signature(self._load_private_key(feed_id), meta.get_as_cbor())
         return Event.Event(meta, signature, content).get_as_cbor()
@@ -130,7 +131,7 @@ class EventCreationTool:
         private_key = self._load_private_key(feed_id)
         content = Event.Content(content_identifier, content_parameter)
         meta = Event.Meta(feed_id, last_sequence_number + 1,
-                                          hash_of_previous_meta, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
+                          hash_of_previous_meta, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
         signature = self._calculate_signature(private_key, meta.get_as_cbor())
         return Event.Event(meta, signature, content).get_as_cbor()
 
@@ -159,8 +160,6 @@ class EventCreationTool:
 
     def _load_private_key(self, feed_id):
         try:
-            print("HEEEEEEEEERE")
-            print(os.path.join(self._path_to_keys, feed_id.hex() + '.key'))
             file = open(os.path.join(self._path_to_keys, feed_id.hex() + '.key'), 'rb')
         except FileNotFoundError:
             raise KeyFileNotFoundException
@@ -183,6 +182,17 @@ class EventCreationTool:
             return hmac.new(private_key, cbor_bytes, hashlib.sha256).digest()
         else:
             raise SigningAlgorithmNotFoundException
+
+
+class FirstEventWasNotCreatedException(Exception):
+    def __init__(self):
+        super().__init__("You can not create the next event, please create a first event "
+                         + "(using first_event() function) first.")
+
+
+class FirstEventWasAlreadyCreatedException(Exception):
+    def __init__(self):
+        super().__init__("You can not create a first event, since it was already created.")
 
 
 class EventFactory(EventCreationTool):
@@ -215,19 +225,22 @@ class EventFactory(EventCreationTool):
     def get_feed_id(self):
         return self.public_key
 
+    def first_event(self, app_name, master_feed_id):
+        if self.sequence_number != -1:
+            raise FirstEventWasAlreadyCreatedException
+        first_event = self.create_first_event(self.public_key, app_name, master_feed_id)
+        self.hash_of_previous_meta = self._calculate_hash(Event.Event.from_cbor(first_event).meta.get_as_cbor())
+        self.sequence_number += 1
+        return first_event
+
     def next_event(self, content_identifier, content_parameter=None):
         if self.sequence_number == -1:
-            new_event = self.create_first_event(self.public_key, content_identifier, content_parameter)
-        else:
-            new_event = self.create_event(self.public_key, self.sequence_number, self.hash_of_previous_meta,
-                                          content_identifier, content_parameter)
-        self.hash_of_previous_meta = self._calculate_hash(
-            Event.Event.from_cbor(new_event).meta.get_as_cbor())
+            raise FirstEventWasNotCreatedException
+        new_event = self.create_event(self.public_key, self.sequence_number, self.hash_of_previous_meta,
+                                      content_identifier, content_parameter)
+        self.hash_of_previous_meta = self._calculate_hash(Event.Event.from_cbor(new_event).meta.get_as_cbor())
         self.sequence_number += 1
         return new_event
 
     def get_private_key(self):
         return self.get_private_key_from_feed_id(self.public_key)
-
-
-

@@ -29,21 +29,30 @@ class DatabaseHandler:
         Calls each the byte array handler as well as the event handler to insert the event in both databases
         accordingly. Gets called both by database connector as well as the function connector. Returns 1 if successful,
         otherwise -1 if any error occurred.
+
+        If a new feed is created for an app, the first event has to contain appname/MASTER and data as {'master_feed': master_feed_id}
         """
-        # if app:
-        #     event = Event.from_cbor(event_as_cbor)
-        #     feed_id = event.meta.feed_id
-        #     content = event.content.content
-        #     master_feed = content[1]['master_feed']
-        #     if self.__byteArrayHandler.get_current_event_as_cbor(feed_id) is None:
-        #         if master_feed == self.__eventHandler.get_host_master_id():
-        #             last_event = self.__eventHandler.get_my_last_event()
-        #             cont_ident = content[0].split('/')[0]
-        #             ecf = EventFactory(last_event)
-        #             event = ecf.next_event('MASTER/NewFeed', {'feed_id': feed_id, 'app_name': cont_ident})
-        #             self.add_to_db(event, False)
-        #         else:
-        #             return -1
+        if app:
+            event = Event.from_cbor(event_as_cbor)
+            feed_id = event.meta.feed_id
+            content = event.content.content
+            cont_ident = content[0].split('/')
+            application = cont_ident[0]
+            if application != 'MASTER':
+                try:
+                    master_feed = content[1]['master_feed']
+                except KeyError as e:
+                    logger.error(e)
+                    return
+                if self.__byteArrayHandler.get_current_event_as_cbor(feed_id) is None:
+                    if master_feed == self.__eventHandler.get_host_master_id():
+                        last_event = self.__eventHandler.get_my_last_event()
+                        cont_ident = content[0].split('/')[0]
+                        ecf = EventFactory(last_event)
+                        event = ecf.next_event('MASTER/NewFeed', {'feed_id': feed_id, 'app_name': cont_ident})
+                        self.add_to_db(event, False)
+                    else:
+                        return -1
         try:
             self.__byteArrayHandler.insert_byte_array(event_as_cbor)
         except InvalidSequenceNumber as e:

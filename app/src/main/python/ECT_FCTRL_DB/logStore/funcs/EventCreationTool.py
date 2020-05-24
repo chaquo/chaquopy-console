@@ -12,8 +12,9 @@ import nacl.signing  # install with 'pip install pynacl'
 import nacl.encoding
 import os
 
-# !!! For the code to work your also need to install cbor2 (This is used inside Event.py) !!!
-# Install with: 'pip install cbor2'
+
+# !!! For the code to work your also need to install cbor (This is used inside Event.py) !!!
+# Install with: 'pip install cbor'
 
 
 class HashingAlgorithmNotFoundException(Exception):
@@ -42,7 +43,6 @@ class IllegalArgumentTypeException(Exception):
 
 
 class EventCreationTool:
-
     # These are the currently supported signing/hashing algorithms. Contact us if you need another one!
     _SIGN_INFO = {'ed25519': 0, 'hmac_sha256': 1}
     _HASH_INFO = {'sha256': 0}
@@ -129,7 +129,7 @@ class EventCreationTool:
         private_key = self._load_private_key(feed_id)
         content = Content(content_identifier, content_parameter)
         meta = Meta(feed_id, last_sequence_number + 1,
-                          hash_of_previous_meta, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
+                    hash_of_previous_meta, self._signing_algorithm, self._calculate_hash(content.get_as_cbor()))
         signature = self._calculate_signature(private_key, meta.get_as_cbor())
         return Event(meta, signature, content).get_as_cbor()
 
