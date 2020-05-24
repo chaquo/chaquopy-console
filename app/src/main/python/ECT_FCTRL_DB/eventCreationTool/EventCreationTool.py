@@ -4,7 +4,7 @@
 
 # For documentation how to use this tool, please refer to README.md
 
-import ECT_FCTRL_DB.eventCreationTool.Event  # Our representation of an feed event, please refer to Event.py
+import ECT_FCTRL_DB.eventCreationTool.Event as Event# Our representation of an feed event, please refer to Event.py
 import hashlib
 import hmac
 import secrets

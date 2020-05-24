@@ -25,7 +25,6 @@ def split_inp(inp):
 
 #WE ADDED PARAMETER
 def cli(inp):
-    running = True
 
     # CLI test
     ufh = UiFunctionHandler()
@@ -41,76 +40,76 @@ def cli(inp):
     radius = ufh.get_radius()
 
     print("Welcome to the Feed Control Demo! \n")
-    while running:
 
-        #WE COMMENTED!
-        #inp = input()
-        sinp = split_inp(inp)
-        cmd = sinp[0]
-        args = sinp[1:]
 
-        if cmd == '-p':
-            print("Host: " + ufh.get_username(hostID))
-            if masterIDs is not None:
-                i = 0
-                for masterID in masterIDs:
-                    i = i + 1
-                    print('%d. ' % i + ufh.get_username(masterID))
-                    feedIDs = ufh.get_all_master_ids_feed_ids(masterID)
-                    j = 0
-                    for feedID in feedIDs:
-                        j = j + 1
-                        appName = ufh.get_application(feedID)
-                        if feedID in trusted:
-                            print("  %d. " % j + bcolors.TRUSTED + appName + bcolors.ENDC)
-                        elif feedID in blocked:
-                            print("  %d. " % j + bcolors.BLOCKED + appName + bcolors.ENDC)
-                        else:
-                            print("  %d. " % j + appName)
+    #WE COMMENTED!
+    #inp = input()
+    sinp = split_inp(inp)
+    cmd = sinp[0]
+    args = sinp[1:]
 
-        elif cmd == '-t':
-            masterID = masterIDs[int(args[0]) - 1]
-            feed_id = masterID
-            if int(args[1]) > 0:
+    if cmd == '-p':
+        print("Host: " + ufh.get_username(hostID))
+    if masterIDs is not None:
+            i = 0
+            for masterID in masterIDs:
+                i = i + 1
+                print('%d. ' % i + ufh.get_username(masterID))
+                feedIDs = ufh.get_all_master_ids_feed_ids(masterID)
+                j = 0
+                for feedID in feedIDs:
+                    j = j + 1
+                    appName = ufh.get_application(feedID)
+                    if feedID in trusted:
+                        print("  %d. " % j + bcolors.TRUSTED + appName + bcolors.ENDC)
+                    elif feedID in blocked:
+                        print("  %d. " % j + bcolors.BLOCKED + appName + bcolors.ENDC)
+                    else:
+                        print("  %d. " % j + appName)
+
+    elif cmd == '-t':
+        masterID = masterIDs[int(args[0]) - 1]
+        feed_id = masterID
+        if int(args[1]) > 0:
                 feed_id = ufh.get_all_master_ids_feed_ids(masterID)[int(args[1]) - 1]
-            if feed_id not in trusted:
-                ufh.set_trusted(feed_id, True)
-                trusted.add(feed_id)
+        if feed_id not in trusted:
+            ufh.set_trusted(feed_id, True)
+            trusted.add(feed_id)
 
-        elif cmd == '-ut':
-            masterID = masterIDs[int(args[0]) - 1]
-            feed_id = masterID
-            if int(args[1]) > 0:
-                feed_id = ufh.get_all_master_ids_feed_ids(masterID)[int(args[1]) - 1]
-            ufh.set_trusted(feed_id, False)
-            if feed_id in trusted:
-                trusted.discard(feed_id)
-                blocked.add(feed_id)
+    elif cmd == '-ut':
+        masterID = masterIDs[int(args[0]) - 1]
+        feed_id = masterID
+        if int(args[1]) > 0:
+            feed_id = ufh.get_all_master_ids_feed_ids(masterID)[int(args[1]) - 1]
+        ufh.set_trusted(feed_id, False)
+        if feed_id in trusted:
+            trusted.discard(feed_id)
+            blocked.add(feed_id)
 
-        elif cmd == '-r':
-            if not args:
-                print('Radius: %d' % radius)
-            else:
-                radius = int(args[0])
-                ufh.set_radius(radius)
-
-        elif cmd == '-n':
-            if not args:
-                print(ufh.get_username(hostID))
-            else:
-                ufh.set_username(args[0])
-
-        elif cmd == '-reload':
-            trusted = set(ufh.get_trusted())
-            blocked = set(ufh.get_blocked())
-            masterIDs = ufh.get_master_ids()
-            radius = ufh.get_radius()
-
-        elif cmd == '-q':
-            running = False
-
+    elif cmd == '-r':
+        if not args:
+            print('Radius: %d' % radius)
         else:
-            print(commandList)
+            radius = int(args[0])
+            ufh.set_radius(radius)
+
+    elif cmd == '-n':
+        if not args:
+            print(ufh.get_username(hostID))
+        else:
+            ufh.set_username(args[0])
+
+    elif cmd == '-reload':
+        trusted = set(ufh.get_trusted())
+        blocked = set(ufh.get_blocked())
+        masterIDs = ufh.get_master_ids()
+        radius = ufh.get_radius()
+
+    elif cmd == '-q':
+        running = False
+
+    else:
+        print(commandList)
 
 
 def generate_random_feed_id():

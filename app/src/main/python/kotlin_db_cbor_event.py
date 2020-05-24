@@ -2,13 +2,14 @@
 import ECT_FCTRL_DB.logStore.appconn.kotlin_connection as kotlin
 import ECT_FCTRL_DB.eventCreationTool.EventCreationTool as ect
 import ECT_FCTRL_DB.feed_control as feedCTRL
+import ECT_FCTRL_DB.eventCreationTool.Event as Event
 from com.chaquo.python import Python
 from time import gmtime, strftime
 import main
 
 
 def start():
-    feedCTRL.cli()
+    feedCTRL.cli('')
 
 def change_uname(new_uname):
     path = str(Python.getPlatform().getApplication().getFilesDir())
@@ -45,6 +46,7 @@ def get_uname_by_key(db, key):
 def insert_cbor(type, text):
     path = str(Python.getPlatform().getApplication().getFilesDir())
     db = kotlin.KotlinFunction()
+    db.get_host_master_id()
     timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
     public_keys = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
 
@@ -83,7 +85,6 @@ def insert_cbor(type, text):
 def get_my_feed_events():
     path = str(Python.getPlatform().getApplication().getFilesDir())
     public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
-
     if not public_key:
         db = kotlin.KotlinFunction()
         timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
@@ -101,6 +102,9 @@ def get_my_feed_events():
     public_key = public_key[0]
 
     db = kotlin.KotlinFunction()
+    print("printing master id")
+    print(db.get_host_master_id().hex())
+    print("----------------------------------------------------------------")
     query_output = db.get_all_entries_by_feed_id(public_key)
     pretty_output = []
     uname = get_uname_by_key(db, public_key)
@@ -118,6 +122,10 @@ def get_my_feed_events():
 
         pretty_output.append(t)
 
+    print('printing last kotlin event-------------------')
+    event = Event.Event.from_cbor(db.get_last_kotlin_event())
+    print(event.meta.seq_no)
+    print('------------------------------------------------------------------------')
     #print("query output")
     #print(query_output)
     #print("printing output")

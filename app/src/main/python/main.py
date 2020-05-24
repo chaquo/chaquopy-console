@@ -84,6 +84,7 @@ def get_uname():
 
 
 def main():
+
 	try:
 		while True:
 			print("Avaliable commands: {}".format(options))

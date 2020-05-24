@@ -11,6 +11,7 @@ import secrets
 import nacl.signing  # install with 'pip install pynacl'
 import nacl.encoding
 import os
+from com.chaquo.python import Python
 
 
 # !!! For the code to work your also need to install cbor (This is used inside Event.py) !!!
@@ -187,6 +188,7 @@ class EventFactory(EventCreationTool):
     def __init__(self, last_event=None, path_to_keys=None, path_to_keys_relative=True,
                  signing_algorithm='ed25519', hashing_algorithm='sha256'):
         super().__init__()
+        path_to_keys = str(Python.getPlatform().getApplication().getFilesDir())
         if path_to_keys is not None:
             self.set_path_to_keys(path_to_keys, path_to_keys_relative)
         if last_event is not None:

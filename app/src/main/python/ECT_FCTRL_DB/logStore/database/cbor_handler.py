@@ -34,26 +34,26 @@ class ByteArrayHandler(metaclass=Singleton):
         event = Event.from_cbor(event_as_cbor)
         seq_no = event.meta.seq_no
         feed_id = event.meta.feed_id
-        self.__sqlAlchemyConnector.insert_byte_array(feed_id, seq_no, event_as_cbor)
+        self.sqlAlchemyConnector.insert_byte_array(feed_id, seq_no, event_as_cbor)
 
     def get_current_seq_no(self, feed_id):
         """"Return the current sequence number of a given feed_id, returns an integer with the currently largest
         sequence number for the given feed. Returns -1 if there is no such feed_id in the database."""
-        return self.__sqlAlchemyConnector.get_current_seq_no(feed_id)
+        return self.sqlAlchemyConnector.get_current_seq_no(feed_id)
 
     def get_event(self, feed_id, seq_no):
         """"Return a specific cbor event to the callee with the input feed_id and sequence number. Returns None if
         there is no such entry."""
-        return self.__sqlAlchemyConnector.get_event(feed_id, seq_no)
+        return self.sqlAlchemyConnector.get_event(feed_id, seq_no)
 
     def get_current_event_as_cbor(self, feed_id):
         """"Return the newest (the one with the highest sequence number) cbor event for a feed_id. Returns None if
         there is no such feed_id in the database."""
-        return self.__sqlAlchemyConnector.get_current_event_as_cbor(feed_id)
+        return self.sqlAlchemyConnector.get_current_event_as_cbor(feed_id)
 
     def get_all_feed_ids(self):
         """"Return all current feed ids in the database."""
-        return self.__sqlAlchemyConnector.get_all_feed_ids()
+        return self.sqlAlchemyConnector.get_all_feed_ids()
 
 
 class InvalidSequenceNumber(Exception):

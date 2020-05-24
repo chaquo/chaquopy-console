@@ -3,6 +3,7 @@ package com.chaquo.python.utils;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.chaquo.python.Python;
 import com.chaquo.python.console.R;
 import com.chaquo.python.utils.ui.main.MyFeedTab;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,12 +24,16 @@ public class FeedTabActivity extends BacNetActivity {
     //private RecyclerView myFeedTab;
     //private RecyclerView.Adapter mAdapter;
     //private RecyclerView.LayoutManager layoutManager;
-
+    protected Python py = Python.getInstance();
+    public boolean run = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_tab);
-
+        if (run) {
+            py.getModule("kotlin_db_cbor_event").callAttr("start");
+            run = false;
+        }
         //myFeedTab = findViewById(R.id.my_feed_recycle_tab);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
