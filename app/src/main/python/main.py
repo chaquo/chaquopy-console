@@ -7,9 +7,9 @@ from os.path import join
 import os
 import re
 import pcap
-import eventCreator.EventCreationTool as ect
+import ECT_FCTRL_DB.eventCreationTool.EventCreationTool as ect
 
-import database.appconn.kotlin_connection as kotlin
+import ECT_FCTRL_DB.logStore.appconn.kotlin_connection as kotlin
 
 #from eventCreator import EventCreationToolTests
 

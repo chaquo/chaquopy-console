@@ -1,36 +1,14 @@
 # not static
-import ECT_FCTRL_DB.logstore.appconn.kotlin_connection as kotlin
+import ECT_FCTRL_DB.logStore.appconn.kotlin_connection as kotlin
 import ECT_FCTRL_DB.eventCreationTool.EventCreationTool as ect
+import ECT_FCTRL_DB.feed_control as feedCTRL
 from com.chaquo.python import Python
 from time import gmtime, strftime
 import main
 
-#import hmac
-#import nacl.signing
-#import cbor
-#import binascii
 
-#if application_action == 'post':
-#    username = content[1]['username']
-#    timestamp = content[1]['timestamp']
-#    text = content[1]['text']
-#    self.__sqlAlchemyConnector.insert_kotlin_event(feed_id=feed_id, seq_no=seq_no,
-#                                                   application=application_action,
-#                                                   username=username, oldusername='',
-#                                                   timestamp=timestamp, text=text)
-#
-
-#timestamp=timestamp, text=text)
-#
-#elif application_action == 'username':
-#username = content[1]['newUsername']
-#oldusername = content[1]['oldUsername']
-#
-#timestamp = content[1]['timestamp']
-#self.__sqlAlchemyConnector.insert_kotlin_event(feed_id=feed_id, seq_no=seq_no,
-#application=application_action,
-#username=username, oldusername=oldusername,
-#timestamp=timestamp, text='')
+def start():
+    feedCTRL.cli()
 
 def change_uname(new_uname):
     path = str(Python.getPlatform().getApplication().getFilesDir())
@@ -73,9 +51,10 @@ def insert_cbor(type, text):
     #if True:
     if not public_keys:
         eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
-        # first event for feedCTRL
-        first_event = eg.first_event('KotlinUI', db.get_host_master_id)
-        # very first event (INSERTED BY APP) where the user get assigned the name Anonymous
+        # VERY first event (for feedCTRL)
+        first_event = eg.first_event('KotlinUI', db.get_host_master_id())
+        db.insert_data(first_event)
+        # first event (INSERTED BY user) where the user get assigned the name Anonymous
         first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
         db.insert_data(first_event_byApp)
 
@@ -109,9 +88,12 @@ def get_my_feed_events():
         db = kotlin.KotlinFunction()
         timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
         eg = ect.EventFactory(path_to_keys=path, path_to_keys_relative=False)
-        # very first event where the user get assigned the name Anonymous
-        first_event = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+        # VERY first event (for feedCTRL)
+        first_event = eg.first_event('KotlinUI', db.get_host_master_id())
         db.insert_data(first_event)
+        # first event (INSERTED BY user) where the user get assigned the name Anonymous
+        first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+        db.insert_data(first_event_byApp)
 
         # re-compute public_keys, now it should contain exactly one element
         public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)

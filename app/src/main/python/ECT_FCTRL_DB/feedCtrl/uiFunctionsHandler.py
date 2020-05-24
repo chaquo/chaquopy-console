@@ -1,5 +1,5 @@
-from logStore.funcs.EventCreationTool import EventFactory
-from logStore.appconn.feed_ctrl_connection import FeedCtrlConnection
+from ECT_FCTRL_DB.logStore.funcs.EventCreationTool import EventFactory
+from ECT_FCTRL_DB.logStore.appconn.feed_ctrl_connection import FeedCtrlConnection
 from nacl.signing import SigningKey
 import secrets
 from .eventCreationWrapper import EventCreationWrapper

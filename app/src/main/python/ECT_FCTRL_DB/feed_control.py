@@ -1,6 +1,6 @@
-from feedCtrl.uiFunctionsHandler import UiFunctionHandler
+from ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler import UiFunctionHandler
 from feedCtrl.uiFunctionsHandler import generate_test_data  # noqa: F401
-from feedCtrl import ui
+from ECT_FCTRL_DB.feedCtrl import ui
 from logStore.verific.verify_insertion import Verification  # noqa: F401
 from logStore.funcs.EventCreationTool import EventFactory  # noqa: F401
 from logStore.appconn.feed_ctrl_connection import FeedCtrlConnection  # noqa: F401
@@ -22,8 +22,8 @@ def split_inp(inp):
     _inp = inp.split(" ")
     return _inp
 
-
-def cli():
+#WE ADDED PARAMETER
+def cli(inp):
     running = True
 
     # CLI test
@@ -42,7 +42,8 @@ def cli():
     print("Welcome to the Feed Control Demo! \n")
     while running:
 
-        inp = input()
+        #WE COMMENTED!
+        #inp = input()
         sinp = split_inp(inp)
         cmd = sinp[0]
         args = sinp[1:]
