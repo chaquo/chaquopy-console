@@ -69,16 +69,19 @@ public class AccountActivity extends BacNetActivity {
         Python py = Python.getInstance();
         PyObject x = py.getModule("kotlin_db_cbor_event");
         TextInputLayout new_uname_field = findViewById(R.id.changeUsernameText);
-        String new_unmae = new_uname_field.getEditText().getText().toString();
+        String new_uname = new_uname_field.getEditText().getText().toString();
 
 
         PyObject y = py.getModule("main");
         String old = y.callAttr("get_uname").toString();
-        if(new_unmae.equals(old)){
+        if(new_uname.equals(old)){
+            return;
+        }
+        if(new_uname.equals("")) {
             return;
         }
 
-        x.callAttr("change_uname", new_unmae);
+        x.callAttr("change_uname", new_uname);
         //System.out.println("hello from the other side");
         setName();
     }
