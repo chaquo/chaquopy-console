@@ -62,19 +62,16 @@ public class MyFeedTab extends Fragment {
             public void onClick(View view) {
 
                 //append to feed
-                EditText receiver = popupView.findViewById(R.id.send_message_to);
                 EditText message = popupView.findViewById(R.id.send_post_content);
-                String audience = receiver.getText().toString();
                 String content = message.getText().toString();
-                postContent(audience, content);
+                postContent(content);
                 popupWindow.dismiss();
                 //System.out.println("CLICKED ON BUTTON");
             }
         });
     }
 
-    void postContent(String audience, String content) {
-        System.out.println(audience);
+    void postContent(String content) {
         //call python
         /*
         Python py = Python.getInstance();
