@@ -1,5 +1,9 @@
 package com.chaquo.python.utils.ui.main;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -21,15 +25,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.console.R;
+import com.chaquo.python.utils.AccountActivity;
+import com.chaquo.python.utils.BitmapManager;
 import com.chaquo.python.utils.FeedLog;
 import com.chaquo.python.utils.MyFeedAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class GeneralFeedTab extends Fragment {
@@ -38,6 +47,8 @@ public class GeneralFeedTab extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private static int RESULT_LOAD_IMAGE = 1;
+    private Bitmap bitmap;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void openSendMessageActivity() {
@@ -64,12 +75,54 @@ public class GeneralFeedTab extends Fragment {
                 //append to feed
                 EditText message = popupView.findViewById(R.id.send_post_content);
                 String content = message.getText().toString();
+                if(bitmap != null){
+                    //String s = Huffmann.encode(BitmapManager.fromBitMapToString(bitmap));
+                    String s = BitmapManager.fromBitMapToString(bitmap);
+                    content = BitmapManager.SEPARATOR + content + BitmapManager.SEPARATOR + s;
+                }
                 postContent(content);
                 popupWindow.dismiss();
+                bitmap = null;
                 //System.out.println("CLICKED ON BUTTON");
             }
         });
+
+        Button add_img = popupView.findViewById(R.id.add_img);
+        add_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getImg();
+            }
+        });
     }
+
+
+    public void getImg(){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, GeneralFeedTab.RESULT_LOAD_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                bitmap = BitmapFactory.decodeStream(imageStream);
+                bitmap = Bitmap.createScaledBitmap(
+                        bitmap, 100, 100, false);
+                //image_view.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+            }
+
+        }else {
+            //Toast.makeText(PostImage.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     void postContent(String content) {
         //call python
@@ -89,14 +142,19 @@ public class GeneralFeedTab extends Fragment {
         passLogToGUI();
     }
 
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            passLogToGUI();
+        try {
+            if (isVisibleToUser) {
+                passLogToGUI();
+            }
+        }
+        catch (Exception e){
+            ;
         }
     }
+
 
 
     @Nullable
@@ -155,7 +213,6 @@ public class GeneralFeedTab extends Fragment {
 
         mAdapter = new MyFeedAdapter(feed);
         recyclerView.setAdapter(mAdapter);
-
 
     }
 

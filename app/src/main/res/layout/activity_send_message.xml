@@ -6,6 +6,13 @@
     android:background="#FAFBFD"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/add_img"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:text="add image" />
+
     <EditText
         android:id="@+id/send_post_content"
         android:layout_width="wrap_content"

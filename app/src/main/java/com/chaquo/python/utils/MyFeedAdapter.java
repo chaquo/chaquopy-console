@@ -1,13 +1,16 @@
 package com.chaquo.python.utils;
 
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaquo.python.console.R;
+import com.chaquo.python.utils.ui.main.Huffmann;
 
 public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.MyViewHolder> {
     private FeedLog[] mDataset;
@@ -35,7 +38,7 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.MyViewHold
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MyFeedAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
         // create a new view
         LinearLayout l = (LinearLayout)  LayoutInflater.from(parent.getContext())
@@ -54,9 +57,23 @@ public class MyFeedAdapter extends RecyclerView.Adapter<MyFeedAdapter.MyViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         //((TextView) holder.layout.findViewById(R.id.my_text_view_name)).setText(mDataset[position].log_name);
-        ((TextView) holder.layout.findViewById(R.id.my_text_view_content)).setText(mDataset[position].log_content);
+        String content = mDataset[position].log_content;
         ((TextView) holder.layout.findViewById(R.id.my_text_view_timestamp)).setText(mDataset[position].timestamp);
         ((TextView) holder.layout.findViewById(R.id.my_text_view_name)).setText(mDataset[position].log_name);
+        if(content.startsWith(BitmapManager.SEPARATOR)){
+            int index = content.indexOf(BitmapManager.SEPARATOR, 1);
+            String s = content.substring(index+1);
+            //s = Huffmann.decode(s);
+            Bitmap b = BitmapManager.fromStringToBitmap(s);
+            ((ImageView) holder.layout.findViewById(R.id.img)).setImageBitmap(b);
+
+            String newcon = content.substring(0,index).replace('|', ' ');
+            ((TextView) holder.layout.findViewById(R.id.my_text_view_content)).setText(newcon);
+        }
+        else{
+            //content = content.replace('|', ' ');
+            ((TextView) holder.layout.findViewById(R.id.my_text_view_content)).setText(content);
+        }
         //holder.textView.setText(mDataset[position]);
 
     }

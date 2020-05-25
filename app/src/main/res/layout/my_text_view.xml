@@ -13,7 +13,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="ExtraText">
 
         <TextView
             android:id="@+id/my_text_view_name"
@@ -29,6 +31,9 @@
             android:gravity="end"
             android:text="Alice" />
 
+
+
+
     </LinearLayout>
 
     <TextView
@@ -37,6 +42,12 @@
         android:layout_height="match_parent"
         android:paddingTop="4dp"
         android:text="@string/my_text_view_content" />
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO" />
 
 
 </LinearLayout>
