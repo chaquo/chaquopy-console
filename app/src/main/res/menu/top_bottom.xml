@@ -5,9 +5,6 @@
     <item android:title="@string/Feed"
         android:id="@+id/menu_myFeed"
         />
-    <item android:title="@string/myDebug"
-        android:id="@+id/menu_Debug"
-        />
     <item android:title="@string/Account"
         android:id="@+id/menu_Account"
         />

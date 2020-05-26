@@ -10,18 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.chaquo.python.utils.FeedTabActivity" />
         <activity android:name="com.chaquo.python.utils.FriendslistActivity" />
         <activity android:name="com.chaquo.python.utils.AccountActivity" />
-        <activity android:name="com.chaquo.python.utils.PostActivity" />
         <activity android:name="com.chaquo.python.utils.RecyclerFeedActivity" />
-        <activity
-            android:name="com.chaquo.python.utils.MyFeedActivity"
-            android:label="@string/title_activity_my_feed"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.chaquo.python.utils.BacNetActivity" />
-        <activity android:name="com.chaquo.python.utils.MainActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.chaquo.python.utils.FeedTabActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
