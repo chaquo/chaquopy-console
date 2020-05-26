@@ -80,6 +80,9 @@ public class GeneralFeedTab extends Fragment {
                     String s = BitmapManager.fromBitMapToString(bitmap);
                     content = BitmapManager.SEPARATOR + content + BitmapManager.SEPARATOR + s;
                 }
+                if(content.equals("") && bitmap == null){
+                    return;
+                }
                 postContent(content);
                 popupWindow.dismiss();
                 bitmap = null;

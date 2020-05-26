@@ -64,12 +64,16 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
         final Person p = mDataset[position];
 
         final TextView t = holder.layout.findViewById(R.id.username);
+        final LinearLayout row = holder.layout.findViewById(R.id.row);
         t.setText(p.name);
         if(p.trusted) {
-            t.setBackgroundColor(Color.GREEN);
+            row.setBackgroundColor(Color.WHITE);
+            t.setTextColor(Color.BLACK);
+
         }
         else{
-            t.setBackgroundColor(Color.RED);
+            row.setBackgroundColor(Color.LTGRAY);
+            t.setTextColor(Color.GRAY);
         }
         t.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -81,14 +85,16 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
                     Snackbar snackbar = Snackbar
                             .make(view, "You are now blocking " + p.name, Snackbar.LENGTH_LONG);
                     snackbar.show();
-                    t.setBackgroundColor(Color.RED);
+                    row.setBackgroundColor(Color.LTGRAY);
+                    t.setTextColor(Color.GRAY);
                     x.callAttr("block","" + p.master_idx, "" + p.feed_id_idx);
                 }
                 else{
                     Snackbar snackbar = Snackbar
                             .make(view, "You are now trusting " + p.name, Snackbar.LENGTH_LONG);
                     snackbar.show();
-                    t.setBackgroundColor(Color.GREEN);
+                    row.setBackgroundColor(Color.WHITE);
+                    t.setTextColor(Color.BLACK);
                     x.callAttr("trust","" + p.master_idx, "" + p.feed_id_idx);
                 }
                 p.trusted = !p.trusted;
