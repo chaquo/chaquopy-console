@@ -1,14 +1,19 @@
 package com.chaquo.python.utils;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaquo.python.console.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.MyViewHolder> {
     private Person[] mDataset;
@@ -54,9 +59,9 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Person p = mDataset[position];
+        final Person p = mDataset[position];
 
-        TextView t = holder.layout.findViewById(R.id.username);
+        final TextView t = holder.layout.findViewById(R.id.username);
         t.setText(p.name);
         if(p.trusted) {
             t.setBackgroundColor(Color.GREEN);
@@ -64,6 +69,25 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
         else{
             t.setBackgroundColor(Color.RED);
         }
+        t.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View view) {
+                if(p.trusted) {
+                    Snackbar snackbar = Snackbar
+                            .make(view, "You are now blocking " + p.name, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    t.setBackgroundColor(Color.RED);
+                }
+                else{
+                    Snackbar snackbar = Snackbar
+                            .make(view, "You are now trusting " + p.name, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    t.setBackgroundColor(Color.GREEN);
+                }
+                p.trusted = !p.trusted;
+            }
+        });
         //holder.textView.setText(mDataset[position]);
 
     }
