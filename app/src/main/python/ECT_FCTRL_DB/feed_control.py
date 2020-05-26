@@ -50,9 +50,12 @@ def cli(inp):
     cmd = sinp[0]
     args = sinp[1:]
 
+
+    #(masterindex, username, feed_id_index, feedid) per user in DB
     if cmd == '-p':
+        list = []
         print("Host: " + ufh.get_username(hostID))
-    if masterIDs is not None:
+        if masterIDs is not None:
             i = 0
             for masterID in masterIDs:
                 i = i + 1
@@ -62,12 +65,9 @@ def cli(inp):
                 for feedID in feedIDs:
                     j = j + 1
                     appName = ufh.get_application(feedID)
-                    if feedID in trusted:
-                        print("  %d. " % j + bcolors.TRUSTED + appName + bcolors.ENDC)
-                    elif feedID in blocked:
-                        print("  %d. " % j + bcolors.BLOCKED + appName + bcolors.ENDC)
-                    else:
-                        print("  %d. " % j + appName)
+                    if appName == 'KotlinUI': # WE ADDED
+                        list.append((i, ufh.get_username(masterID),j, feedID)) # WE ADDED
+        return list # WE ADDED
 
     elif cmd == '-t':
         masterID = masterIDs[int(args[0]) - 1]

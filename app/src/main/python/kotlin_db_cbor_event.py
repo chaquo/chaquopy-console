@@ -42,10 +42,13 @@ def start():
     print("This should contain AT LEAST 2 events")
     print(db.get_all_kotlin_events())
     print("-----------------------")
+    print('TESTING CLI FUNCTION')
+    print(get_all_DB_user())
 
     #feedCTRL.cli('')
 
-
+def get_all_DB_user():
+    return feedCTRL.cli('-p')
 
 def change_uname(new_uname):
     path = str(Python.getPlatform().getApplication().getFilesDir())
