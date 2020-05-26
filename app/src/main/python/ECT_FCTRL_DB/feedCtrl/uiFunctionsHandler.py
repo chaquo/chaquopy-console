@@ -123,17 +123,16 @@ def create_friend(name):
     trust_id3 = generate_random_feed_id()
     new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
     fcc.add_event(new_event)
-    #trust_id4 = generate_random_feed_id()
-    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
-    fcc.add_event(new_event)
     new_event = ecf2.next_event('MASTER/Name', {'name': name})
     fcc.add_event(new_event)
 
-    #new_event = ecf.next_event('MASTER/Trust', {'feed_id': trust_id3})
+    new_event = ecf2.next_event('KotlinUI/MASTER', {'master_feed_id': trust_id3})
+    fcc.add_event(new_event)
+    first_event_byApp = ecf2.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": "101010"})
+    fcc.add_event(first_event_byApp)
 
-    #ufh.set_trusted(trust_id3, choice[True, False])
+
     ufh.set_trusted(trust_id3, random.choice([True, False]))
-    #ufh.set_trusted(trust_id3, False)
 
     ufh.set_radius(2)
 

@@ -8,6 +8,9 @@ from com.chaquo.python import Python
 from time import gmtime, strftime
 import main
 
+def set_master_uname(uname):
+    feedCTRL.cli("-n {}".format(uname))
+
 def trust(master_idx, feed_idx):
     feedCTRL.cli("-t {} {}".format(master_idx, feed_idx))
     ufh = ui.UiFunctionHandler()
@@ -42,6 +45,7 @@ def start():
         db.insert_data(first_event)
         first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
         db.insert_data(first_event_byApp)
+        set_master_uname("Anonymous")
 
     #feedCTRL.cli('-t 0 0')
     #feedCTRL.cli('-t 0 1')
@@ -85,6 +89,7 @@ def change_uname(new_uname):
     timestamp = strftime("%Y-%m-%d %H:%M", gmtime())
     uname_event = eg.next_event("KotlinUI/username", {"newUsername": new_uname, "oldUsername": get_uname_by_key(db, get_pk()), "timestamp": timestamp})
     db.insert_data(uname_event)
+    set_master_uname(new_uname)
 
 def get_all_usernames():
     db = kotlin.KotlinFunction()
@@ -125,6 +130,7 @@ def insert_cbor(type, text):
         db.insert_data(first_event)
         # first event (INSERTED BY user) where the user get assigned the name Anonymous
         first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+        set_master_uname("Anonymous")
         db.insert_data(first_event_byApp)
 
         # re-compute public_keys, now it should contain exactly one element
@@ -142,6 +148,7 @@ def insert_cbor(type, text):
     eg = ect.EventFactory(last_event=db.get_last_kotlin_event(), path_to_keys= path, path_to_keys_relative= False)
     if type == "username":
         new_event = eg.next_event("KotlinUI/username", {"newUsername": uname, "oldUsername": "Anonymous", "timestamp": timestamp})
+        set_master_uname(uname)
     else:
         new_event = eg.next_event("KotlinUI/post", {"username": uname, "timestamp": timestamp, "text": text})
     db.insert_data(new_event)
