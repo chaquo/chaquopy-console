@@ -85,7 +85,7 @@ public class FriendslistActivity extends BacNetActivity {
 
          */
 
-        //System.out.println("PRINTING PERSONS!");
+        System.out.println("PRINTING PERSONS!");
         for(int i = 0; i < y.length; i++){
                 int master_idx = Integer.parseInt(y[i][index_of_master_idx]);
                 String name = y[i][name_indx];
@@ -93,9 +93,9 @@ public class FriendslistActivity extends BacNetActivity {
                 String feed_id = y[i][index_of_feed_id];
                 boolean trusted = y[i][trusted_idx].equals("1");
                 persons[i]  = new Person(master_idx, name, feed_id_idx, feed_id, trusted);
-                //System.out.println(persons[i]);
+                System.out.println(persons[i]);
         }
-        //System.out.println("FINISHED PRINTING PERSONS");
+        System.out.println("FINISHED PRINTING PERSONS");
 
         //Collections.reverse(Arrays.asList(persons));
 

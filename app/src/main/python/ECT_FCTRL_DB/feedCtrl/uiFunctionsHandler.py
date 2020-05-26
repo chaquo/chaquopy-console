@@ -3,6 +3,7 @@ from ECT_FCTRL_DB.logStore.appconn.feed_ctrl_connection import FeedCtrlConnectio
 from nacl.signing import SigningKey
 import secrets
 from .eventCreationWrapper import EventCreationWrapper
+import random
 
 
 class UiFunctionHandler:
@@ -96,22 +97,25 @@ def generate_random_feed_id():
     Add here if more data is needed.
 """
 
+def generate_test_friend():
+    ufh = UiFunctionHandler()
+    fcc = FeedCtrlConnection()
+    ecf = EventFactory()
 
-def generate_kotlin_test_data():
+    new_event = ecf.next_event('KotlinUI/MASTER', {})
+    fcc.add_event(new_event)
+
+    feed = generate_random_feed_id()
+    timestamp = "101010"
+    first_event_byApp = ecf.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
+    fcc.add_event(first_event_byApp)
+
+    ufh.set_trusted(feed, random.choice([True, False]))
+
+def create_friend(name):
     ufh = UiFunctionHandler()
 
     fcc = FeedCtrlConnection()
-    ecf = EventFactory()
-    new_event = ecf.next_event('KotlinUI/MASTER', {})
-    fcc.add_event(new_event)
-    trust_id1 = generate_random_feed_id()
-    new_event = ecf.next_event('KotlinUI/NewFeed', {'feed_id': trust_id1, 'app_name': 'KotlinUI'})
-    fcc.add_event(new_event)
-    trust_id2 = generate_random_feed_id()
-    new_event = ecf.next_event('KotlinUI/NewFeed', {'feed_id': trust_id2, 'app_name': 'KotlinUI'})
-    fcc.add_event(new_event)
-    new_event = ecf.next_event('KotlinUI/Name', {'name': 'Alice'})
-    fcc.add_event(new_event)
 
     ecf2 = EventFactory()
     new_event = ecf2.next_event('MASTER/MASTER', {})
@@ -119,51 +123,55 @@ def generate_kotlin_test_data():
     trust_id3 = generate_random_feed_id()
     new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
     fcc.add_event(new_event)
-    trust_id4 = generate_random_feed_id()
-    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id4, 'app_name': 'KotlinUI'})
+    #trust_id4 = generate_random_feed_id()
+    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
     fcc.add_event(new_event)
-    new_event = ecf2.next_event('MASTER/Name', {'name': 'Bob'})
+    new_event = ecf2.next_event('MASTER/Name', {'name': name})
     fcc.add_event(new_event)
 
-    new_event = ecf.next_event('MASTER/Trust', {'feed_id': trust_id3})
+    #new_event = ecf.next_event('MASTER/Trust', {'feed_id': trust_id3})
 
-    ufh.set_trusted(trust_id1, True)
-    ufh.set_trusted(trust_id4, True)
-    ufh.set_trusted(trust_id2, False)
+    #ufh.set_trusted(trust_id3, choice[True, False])
+    ufh.set_trusted(trust_id3, random.choice([True, False]))
+    #ufh.set_trusted(trust_id3, False)
 
     ufh.set_radius(2)
+
+
 def generate_test_data():
     ufh = UiFunctionHandler()
 
     fcc = FeedCtrlConnection()
-    ecf = EventFactory()
-    new_event = ecf.next_event('MASTER/MASTER', {})
-    fcc.add_event(new_event)
-    trust_id1 = generate_random_feed_id()
-    new_event = ecf.next_event('MASTER/NewFeed', {'feed_id': trust_id1, 'app_name': 'TestApp1'})
-    fcc.add_event(new_event)
-    trust_id2 = generate_random_feed_id()
-    new_event = ecf.next_event('MASTER/NewFeed', {'feed_id': trust_id2, 'app_name': 'TestApp2'})
-    fcc.add_event(new_event)
-    new_event = ecf.next_event('MASTER/Name', {'name': 'Alice'})
-    fcc.add_event(new_event)
+    #ecf = EventFactory()
+    #new_event = ecf.next_event('MASTER/MASTER', {})
+    #fcc.add_event(new_event)
+    #trust_id1 = generate_random_feed_id()
+    #new_event = ecf.next_event('MASTER/NewFeed', {'feed_id': trust_id1, 'app_name': 'TestApp1'})
+    #fcc.add_event(new_event)
+    #trust_id2 = generate_random_feed_id()
+    #new_event = ecf.next_event('MASTER/NewFeed', {'feed_id': trust_id2, 'app_name': 'TestApp2'})
+    #fcc.add_event(new_event)
+    #new_event = ecf.next_event('MASTER/Name', {'name': 'Alice'})
+    #fcc.add_event(new_event)
 
     ecf2 = EventFactory()
-    new_event = ecf2.next_event('MASTER/MASTER', {})
+    new_event = ecf2.next_event('KotlinUI/MASTER', {})
+    #new_event = ecf2.next_event('MASTER/KotlinUI', {})
     fcc.add_event(new_event)
     trust_id3 = generate_random_feed_id()
-    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id3, 'app_name': 'TestApp1'})
+    new_event = ecf2.next_event('KotlinUI/post', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
+    #####uname_event = eg.next_event("KotlinUI/username", {"newUsername": new_uname, "oldUsername": get_uname_by_key(db, get_pk()), "timestamp": timestamp})
     fcc.add_event(new_event)
-    trust_id4 = generate_random_feed_id()
-    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id4, 'app_name': 'TestApp2'})
+    new_event = ecf2.next_event('KotlinUI/post', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
     fcc.add_event(new_event)
-    new_event = ecf2.next_event('MASTER/Name', {'name': 'Bob'})
+    new_event = ecf2.next_event('KotlinUI/post', {'name': 'Bob'})
     fcc.add_event(new_event)
 
-    new_event = ecf.next_event('MASTER/Trust', {'feed_id': trust_id3})
+    #new_event = ecf.next_event('MASTER/Trust', {'feed_id': trust_id3})
 
-    ufh.set_trusted(trust_id1, True)
-    ufh.set_trusted(trust_id4, True)
-    ufh.set_trusted(trust_id2, False)
+    #ufh.set_trusted(trust_id1, True)
+    ufh.set_trusted(trust_id3, True)
+    #ufh.set_trusted(trust_id4, True)
+    #ufh.set_trusted(trust_id2, False)
 
     ufh.set_radius(2)

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.chaquo.python.console.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -73,17 +75,21 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
+                Python py = Python.getInstance();
+                PyObject x = py.getModule("kotlin_db_cbor_event");
                 if(p.trusted) {
                     Snackbar snackbar = Snackbar
                             .make(view, "You are now blocking " + p.name, Snackbar.LENGTH_LONG);
                     snackbar.show();
                     t.setBackgroundColor(Color.RED);
+                    x.callAttr("block","" + p.master_idx, "" + p.feed_id_idx);
                 }
                 else{
                     Snackbar snackbar = Snackbar
                             .make(view, "You are now trusting " + p.name, Snackbar.LENGTH_LONG);
                     snackbar.show();
                     t.setBackgroundColor(Color.GREEN);
+                    x.callAttr("trust","" + p.master_idx, "" + p.feed_id_idx);
                 }
                 p.trusted = !p.trusted;
             }

@@ -8,6 +8,17 @@ from com.chaquo.python import Python
 from time import gmtime, strftime
 import main
 
+def trust(master_idx, feed_idx):
+    feedCTRL.cli("-t {} {}".format(master_idx, feed_idx))
+    ufh = ui.UiFunctionHandler()
+    #print("giving master index {} and feed index {}".format(master_idx, feed_idx))
+    #print("printing trusted...")
+    #print(ufh.get_trusted())
+
+def block(master_idx, feed_idx):
+    feedCTRL.cli("-ut {} {}".format(master_idx, feed_idx))
+    #handler = ui.UiFunctionHandler()
+    #handler.set_trusted(feedID, False)
 
 def start():
     feedCTRL.cli('')
@@ -45,8 +56,22 @@ def start():
     #print("-----------------------")
     print('TESTING CLI FUNCTION')
 
-    ui.generate_kotlin_test_data()
-    print(get_all_DB_users())
+    #ui.generate_test_friend()
+    #ui.generate_test_data()
+    #ui.generate_kotlin_data()
+
+    ui.create_friend("bob")
+    ui.create_friend("alice")
+    ui.create_friend("lina")
+    ui.create_friend("lino")
+    ui.create_friend("travis")
+    ui.create_friend("lara")
+    ui.create_friend("sanja")
+    ui.create_friend("nour")
+    ui.create_friend("moritz")
+    ui.create_friend("maratz")
+    ui.create_friend("viktor")
+    ui.create_friend("vaktar")
 
     #feedCTRL.cli('')
 
