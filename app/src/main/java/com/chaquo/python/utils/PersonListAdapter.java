@@ -1,5 +1,6 @@
 package com.chaquo.python.utils;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -53,7 +54,16 @@ public class PersonListAdapter extends RecyclerView.Adapter<PersonListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        ((TextView) holder.layout.findViewById(R.id.username)).setText(mDataset[position].getName());
+        Person p = mDataset[position];
+
+        TextView t = holder.layout.findViewById(R.id.username);
+        t.setText(p.name);
+        if(p.trusted) {
+            t.setBackgroundColor(Color.GREEN);
+        }
+        else{
+            t.setBackgroundColor(Color.RED);
+        }
         //holder.textView.setText(mDataset[position]);
 
     }

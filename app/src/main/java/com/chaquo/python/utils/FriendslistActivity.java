@@ -65,16 +65,29 @@ public class FriendslistActivity extends BacNetActivity {
 
         Python py = Python.getInstance();
         PyObject x = py.getModule("kotlin_db_cbor_event");
+        /*
         String[] y = x.callAttr("get_all_usernames").toJava(String[].class);
+        */
+        String[][] y = x.callAttr("get_all_DB_users").toJava(String[][].class);
 
         Person[] persons = new Person[y.length];
 
+        int index_of_master_idx = 0;
+        int name_indx = 1;
+        int index_of_feed_id_idx = 2;
+        int index_of_feed_id = 3;
+        int trusted_idx = 4;
+
         for(int i = 0; i < y.length; i++){
-                String name = y[i];
-                persons[i]  = new Person(name);
+                int master_idx = Integer.parseInt(y[i][index_of_master_idx]);
+                String name = y[i][name_indx];
+                int feed_id_idx = Integer.parseInt(y[i][index_of_feed_id_idx]);
+                String feed_id = y[i][index_of_feed_id];
+                boolean trusted = y[i][trusted_idx].equals("1");
+                persons[i]  = new Person(master_idx, name, feed_id_idx, feed_id, trusted);
         }
 
-        Collections.reverse(Arrays.asList(persons));
+        //Collections.reverse(Arrays.asList(persons));
 
         mAdapter = new PersonListAdapter(persons);
         recyclerView.setAdapter(mAdapter);

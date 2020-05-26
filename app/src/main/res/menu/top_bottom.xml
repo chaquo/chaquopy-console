@@ -8,7 +8,7 @@
     <item android:title="@string/Account"
         android:id="@+id/menu_Account"
         />
-    <item android:title="@string/Friendslist"
+    <item android:title="Onboarding"
         android:id="@+id/menu_Friendslist"
         />
 </menu>

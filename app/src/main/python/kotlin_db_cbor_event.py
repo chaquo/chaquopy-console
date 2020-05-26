@@ -31,23 +31,23 @@ def start():
         first_event_byApp = eg.next_event('KotlinUI/username', {"newUsername": "Anonymous", "oldUsername": "", "timestamp": timestamp})
         db.insert_data(first_event_byApp)
 
-    feedCTRL.cli('-t 0 0')
-    feedCTRL.cli('-t 0 1')
-    feedCTRL.cli('-t 1 0')
-    feedCTRL.cli('-t 1 1')
+    #feedCTRL.cli('-t 0 0')
+    #feedCTRL.cli('-t 0 1')
+    #feedCTRL.cli('-t 1 0')
+    #feedCTRL.cli('-t 1 1')
 
-    print("printing the len of public keys")
-    print(len(public_keys))
-    print("finished printing len of public keys")
-    print("This should contain AT LEAST 2 events")
-    print(db.get_all_kotlin_events())
-    print("-----------------------")
+    #print("printing the len of public keys")
+    #print(len(public_keys))
+    #print("finished printing len of public keys")
+    #print("This should contain AT LEAST 2 events")
+    #print(db.get_all_kotlin_events())
+    #print("-----------------------")
     print('TESTING CLI FUNCTION')
-    print(get_all_DB_user())
+    print(get_all_DB_users())
 
     #feedCTRL.cli('')
 
-def get_all_DB_user():
+def get_all_DB_users():
     return feedCTRL.cli('-p')
 
 def change_uname(new_uname):
@@ -174,9 +174,9 @@ def get_my_feed_events():
 
     #print('printing last kotlin event-------------------')
     #event = Event.Event.from_cbor(db.get_last_kotlin_event())
-    print("printing all kotlin events")
-    print(db.get_all_kotlin_events())
-    print("finished printing kotlin events")
+    #print("printing all kotlin events")
+    #print(db.get_all_kotlin_events())
+    #print("finished printing kotlin events")
     #print(event.meta.seq_no)
     #print('------------------------------------------------------------------------')
     #print("query output")
