@@ -97,6 +97,41 @@ def generate_random_feed_id():
 """
 
 
+def generate_kotlin_test_data():
+    ufh = UiFunctionHandler()
+
+    fcc = FeedCtrlConnection()
+    ecf = EventFactory()
+    new_event = ecf.next_event('KotlinUI/MASTER', {})
+    fcc.add_event(new_event)
+    trust_id1 = generate_random_feed_id()
+    new_event = ecf.next_event('KotlinUI/NewFeed', {'feed_id': trust_id1, 'app_name': 'KotlinUI'})
+    fcc.add_event(new_event)
+    trust_id2 = generate_random_feed_id()
+    new_event = ecf.next_event('KotlinUI/NewFeed', {'feed_id': trust_id2, 'app_name': 'KotlinUI'})
+    fcc.add_event(new_event)
+    new_event = ecf.next_event('KotlinUI/Name', {'name': 'Alice'})
+    fcc.add_event(new_event)
+
+    ecf2 = EventFactory()
+    new_event = ecf2.next_event('MASTER/MASTER', {})
+    fcc.add_event(new_event)
+    trust_id3 = generate_random_feed_id()
+    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id3, 'app_name': 'KotlinUI'})
+    fcc.add_event(new_event)
+    trust_id4 = generate_random_feed_id()
+    new_event = ecf2.next_event('MASTER/NewFeed', {'feed_id': trust_id4, 'app_name': 'KotlinUI'})
+    fcc.add_event(new_event)
+    new_event = ecf2.next_event('MASTER/Name', {'name': 'Bob'})
+    fcc.add_event(new_event)
+
+    new_event = ecf.next_event('MASTER/Trust', {'feed_id': trust_id3})
+
+    ufh.set_trusted(trust_id1, True)
+    ufh.set_trusted(trust_id4, True)
+    ufh.set_trusted(trust_id2, False)
+
+    ufh.set_radius(2)
 def generate_test_data():
     ufh = UiFunctionHandler()
 

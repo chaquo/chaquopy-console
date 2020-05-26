@@ -65,7 +65,9 @@ def cli(inp):
                 for feedID in feedIDs:
                     j = j + 1
                     appName = ufh.get_application(feedID)
-                    if appName is not 'KotlinUI': # WE ADDED
+                    #print("printing appname!!")
+                    #print(appName)
+                    if appName != 'KotlinUI': # WE ADDED
                         continue
                     if feedID in trusted:
                         print("  %d. " % j + bcolors.TRUSTED + appName + bcolors.ENDC)
@@ -76,6 +78,8 @@ def cli(inp):
                     else:
                         print("  %d. " % j + appName)
                         list.append((str(i), ufh.get_username(masterID),str(j), str(feedID), "0")) # WE ADDED
+        #print("printing list")
+        #print(list)
         return list
 
     elif cmd == '-t':

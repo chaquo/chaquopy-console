@@ -15,6 +15,17 @@ public class Person {
         this.trusted = trusted;
     }
 
+    @Override
+    public String toString(){
+        String s = "Person with: \n";
+        s += "master_idx: " + master_idx + "\n";
+        s += "name: " + name+ "\n";
+        s += "feed_id_idx: " + feed_id_idx+ "\n";
+        s += "feed_id: " + feed_id+ "\n";
+        s += "trusted?: " + trusted+ "\n";
+        return s;
+    }
+
 
 
 

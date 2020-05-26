@@ -2,6 +2,7 @@
 import ECT_FCTRL_DB.logStore.appconn.kotlin_connection as kotlin
 import ECT_FCTRL_DB.eventCreationTool.EventCreationTool as ect
 import ECT_FCTRL_DB.feed_control as feedCTRL
+import ECT_FCTRL_DB.feedCtrl.uiFunctionsHandler as ui
 import ECT_FCTRL_DB.eventCreationTool.Event as Event
 from com.chaquo.python import Python
 from time import gmtime, strftime
@@ -43,6 +44,8 @@ def start():
     #print(db.get_all_kotlin_events())
     #print("-----------------------")
     print('TESTING CLI FUNCTION')
+
+    ui.generate_kotlin_test_data()
     print(get_all_DB_users())
 
     #feedCTRL.cli('')
@@ -61,7 +64,7 @@ def change_uname(new_uname):
 def get_all_usernames():
     db = kotlin.KotlinFunction()
     list = []
-    print(db.get_usernames_and_feed_id())
+    #print(db.get_usernames_and_feed_id())
     for tuple in db.get_usernames_and_feed_id():
         name, key = tuple
         list.append(name)
@@ -123,9 +126,9 @@ def insert_cbor(type, text):
 def get_pk():
     db = kotlin.KotlinFunction()
     path = str(Python.getPlatform().getApplication().getFilesDir())
-    print("printing both keys in get_pk()")
+    #print("printing both keys in get_pk()")
     public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
-    print(public_key)
+    #print(public_key)
     if str(public_key[0]) == str(db.get_host_master_id()):
         return public_key[1]
     return public_key[0]
@@ -133,9 +136,9 @@ def get_pk():
 def gui_get_pk():
     db = kotlin.KotlinFunction()
     path = str(Python.getPlatform().getApplication().getFilesDir())
-    print("printing both keys in get_pk()")
+    #print("printing both keys in get_pk()")
     public_key = ect.EventCreationTool.get_stored_feed_ids(directory_path=path, as_strings=False, relative=False)
-    print(public_key)
+    #print(public_key)
     if str(public_key[0]) == str(db.get_host_master_id()):
         return public_key[1].hex()
     return public_key[0].hex()
@@ -148,12 +151,12 @@ def get_my_feed_events():
 
     db = kotlin.KotlinFunction()
 
-    print("printing master id")
-    print(db.get_host_master_id().hex())
-    print("----------------------------------------------------------------")
-    print("printing public key")
-    print(public_key.hex())
-    print("----------------------------------------------------------------")
+    #print("printing master id")
+    #print(db.get_host_master_id().hex())
+    #print("----------------------------------------------------------------")
+    #print("printing public key")
+    #print(public_key.hex())
+    #print("----------------------------------------------------------------")
 
     query_output = db.get_all_entries_by_feed_id(public_key)
     pretty_output = []
