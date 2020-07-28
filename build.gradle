@@ -8,11 +8,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:4.0.1'
 
         // Newer versions may be available: please check here:
         // https://chaquo.com/chaquopy/doc/current/changelog.html
-        classpath 'com.chaquo.python:gradle:8.0.0'
+        classpath 'com.chaquo.python:gradle:8.0.1'
     }
 }
 
