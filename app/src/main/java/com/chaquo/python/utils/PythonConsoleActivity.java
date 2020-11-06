@@ -2,7 +2,9 @@ package com.chaquo.python.utils;
 
 import android.app.*;
 import android.os.*;
+import android.text.*;
 import android.util.*;
+import android.widget.*;
 import androidx.lifecycle.*;
 import com.chaquo.python.*;
 
@@ -10,7 +12,7 @@ import com.chaquo.python.*;
  * will be directed to the output view whenever the activity is resumed. If the Python code
  * caches their values, it can direct output to the activity even when it's paused.
  *
- * If STDIN_ENABLED is passed to the Task constructor, sys.stdin will also be redirected whenever
+ * Unless inputType is InputType.TYPE_NULL, sys.stdin will also be redirected whenever
  * the activity is resumed. The input box will initially be hidden, and will be displayed the
  * first time sys.stdin is read. */
 public abstract class PythonConsoleActivity extends ConsoleActivity {
@@ -20,6 +22,9 @@ public abstract class PythonConsoleActivity extends ConsoleActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         task = ViewModelProviders.of(this).get(getTaskClass());
+        if (task.inputType != InputType.TYPE_NULL) {
+            ((TextView) findViewById(resId("id", "etInput"))).setInputType(task.inputType);
+        }
     }
 
     protected abstract Class<? extends Task> getTaskClass();
@@ -41,34 +46,36 @@ public abstract class PythonConsoleActivity extends ConsoleActivity {
     public static abstract class Task extends ConsoleActivity.Task {
 
         protected Python py = Python.getInstance();
-        private PyObject sys;
+        private PyObject console = py.getModule("chaquopy.utils.console");
+        private PyObject sys = py.getModule("sys");
+        int inputType;
         private PyObject stdin, stdout, stderr;
         private PyObject realStdin, realStdout, realStderr;
 
-        public static final int STDIN_DISABLED = 0x0, STDIN_ENABLED = 0x1;
+        public Task(Application app) {
+            this(app, InputType.TYPE_CLASS_TEXT);
+        }
 
-        public Task(Application app) { this(app, STDIN_ENABLED); }
-
-        public Task(Application app, int flags) {
+        public Task(Application app, int inputType) {
             super(app);
-            sys = py.getModule("sys");
-            PyObject console = py.getModule("chaquopy.utils.console");
-            if ((flags & STDIN_ENABLED) != 0) {
+            this.inputType = inputType;
+            if (inputType != InputType.TYPE_NULL) {
                 realStdin = sys.get("stdin");
                 stdin = console.callAttr("ConsoleInputStream", this);
             }
 
             realStdout = sys.get("stdout");
             realStderr = sys.get("stderr");
-            stdout = console.callAttr("ConsoleOutputStream", this, "output", realStdout);
-            stderr = console.callAttr("ConsoleOutputStream", this, "outputError", realStderr);
+            stdout = redirectOutput(realStdout, this::output);
+            stderr = redirectOutput(realStderr, this::outputError);
         }
 
-        /** Create the thread from Python rather than Java, otherwise user code may be surprised
-         * to find its Python Thread object marked as "dummy" and "daemon". */
-        @Override protected void startThread(Runnable runnable) {
-            PyObject console = py.getModule("chaquopy.utils.console");
-            console.callAttr("start_thread", runnable);
+        private PyObject redirectOutput(PyObject stream, OutputFunction func) {
+            return console.callAttr("ConsoleOutputStream", stream, func);
+        }
+
+        private interface OutputFunction {
+            void output(CharSequence text);
         }
 
         public void resumeStreams() {
