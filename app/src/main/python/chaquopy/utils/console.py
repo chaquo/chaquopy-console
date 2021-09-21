@@ -1,13 +1,14 @@
 from io import TextIOBase
 from queue import Queue
 
+from java.android.stream import BytesOutputWrapper
+
 
 class ConsoleInputStream(TextIOBase):
     """Receives input in on_input in one thread (non-blocking), and provides a read interface
     in another thread (blocking).
     """
     def __init__(self, task):
-        TextIOBase.__init__(self)
         self.task = task
         self.queue = Queue()
         self.buffer = ""
@@ -65,13 +66,16 @@ class ConsoleInputStream(TextIOBase):
 
 
 class ConsoleOutputStream(TextIOBase):
-    """Passes each write to the underlying stream, and also to the given function, which must take
+    """Passes each write to the underlying stream, and also to the given method, which must take
     a single string argument.
     """
-    def __init__(self, stream, func):
-        TextIOBase.__init__(self)
+    def __init__(self, stream, obj, method_name):
         self.stream = stream
-        self.func = func
+        self.method = getattr(obj, method_name)
+        self.buffer = BytesOutputWrapper(self)
+
+    def __repr__(self):
+        return f"<ConsoleOutputStream {self.stream}>"
 
     @property
     def encoding(self):
@@ -82,11 +86,14 @@ class ConsoleOutputStream(TextIOBase):
         return self.stream.errors
 
     def writable(self):
-        return True
+        return self.stream.writable()
 
     def write(self, s):
-        self.func(s)
-        return self.stream.write(s)
+        # Pass the write to the underlying stream first, so that if it throws an exception, the
+        # app crashes in the same way whether it's using ConsoleOutputStream or not (#5712).
+        result = self.stream.write(s)
+        self.method(s)
+        return result
 
     def flush(self):
         self.stream.flush()
