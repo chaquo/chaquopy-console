@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace 'com.chaquo.python.console'
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.chaquo.python.console"
@@ -33,7 +34,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'com.chaquo.python.console'
 }
 
 dependencies {
