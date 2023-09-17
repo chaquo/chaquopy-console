@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    namespace 'com.chaquo.python.console'
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.chaquo.python.console"
