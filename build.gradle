@@ -1,7 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '8.4.2' apply false
-    id 'com.chaquo.python' version '16.1.0' apply false
+    id 'com.chaquo.python' version '17.0.0' apply false
+
+    // This app doesn't use Kotlin directly, but some of the androidx dependencies
+    // do, which causes "Duplicate class" errors when the plugin isn't present
+    // (https://youtrack.jetbrains.com/issue/KT-55297).
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
 }
 
 task clean(type: Delete) {

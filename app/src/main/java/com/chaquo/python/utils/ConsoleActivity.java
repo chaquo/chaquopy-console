@@ -14,7 +14,7 @@ import androidx.appcompat.app.*;
 import androidx.core.content.*;
 import androidx.lifecycle.*;
 
-public abstract class ConsoleActivity extends AppCompatActivity
+public abstract class ConsoleActivity extends BaseActivity
 implements ViewTreeObserver.OnGlobalLayoutListener, ViewTreeObserver.OnScrollChangedListener {
 
     // Because tvOutput has freezesText enabled, letting it get too large can cause a

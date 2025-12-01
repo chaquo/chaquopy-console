@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <!-- This may be overridden in other "values" directories. -->
     <style name="AppTheme" parent="AppTheme.Base"/>
 
 </resources>
